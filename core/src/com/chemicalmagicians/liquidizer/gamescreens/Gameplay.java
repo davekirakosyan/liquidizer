@@ -27,6 +27,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private Image elixir;
 
+    private int elixirCurrentPos = 0;
+
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
     }
@@ -39,7 +41,21 @@ public class Gameplay extends GameScreen implements IGameplay {
     @Override
     public void start () {
         batch = new SpriteBatch();
-        elixir = new Image(new Texture("elixir-particle.png") );
+
+        createCurve();
+    }
+
+
+    public void render() {
+        elixir.setPosition(curvePoints[elixirCurrentPos].x, Gdx.graphics.getHeight()-curvePoints[elixirCurrentPos].y);
+        if (elixirCurrentPos < curvePoints.length-1) {
+            elixirCurrentPos++;
+        } else {
+            elixirCurrentPos = 0;
+        }
+    }
+
+    private void createCurve() {
         sr = new ShapeRenderer();
         sr.setAutoShapeType(true);
 
@@ -50,7 +66,10 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         path = new CatmullRomSpline<Vector2>(controlPoints, true);
 
+        elixir = new Image(new Texture("elixir-particle.png") );
+
         elixir.setPosition(100, 100);
+        elixir.scaleBy(-0.9f);
         this.addActor(elixir);
         sr.setColor(Color.RED);
         sr.begin();
@@ -66,15 +85,4 @@ public class Gameplay extends GameScreen implements IGameplay {
         sr.end();
     }
 
-    private int elixirCurrentPos = 0;
-    public void render() {
-        elixir.setPosition(curvePoints[elixirCurrentPos].x, Gdx.graphics.getHeight()-curvePoints[elixirCurrentPos].y);
-        if (elixirCurrentPos < curvePoints.length-1) {
-            elixirCurrentPos++;
-        } else {
-            elixirCurrentPos = 0;
-        }
-
-
-    }
 }
