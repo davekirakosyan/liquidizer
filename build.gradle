@@ -23,7 +23,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = "liquidizer"
-        gdxVersion = '1.9.8'
+        gdxVersion = '1.9.9-SNAPSHOT'
         roboVMVersion = '2.3.3'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
@@ -82,7 +82,8 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        
+        compile "com.github.Tom-Ski:spine-runtimes:c4b4a0c95e"
+
     }
 }
 
