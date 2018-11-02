@@ -1,6 +1,8 @@
 package com.chemicalmagicians.liquidizer.gamescreens;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,6 +15,7 @@ import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.data.LevelData;
 import com.chemicalmagicians.liquidizer.interfaces.IGameplay;
 import com.chemicalmagicians.liquidizer.ui.*;
+import javafx.scene.input.KeyCode;
 
 public class Gameplay extends GameScreen implements IGameplay {
 
@@ -31,7 +34,9 @@ public class Gameplay extends GameScreen implements IGameplay {
         super(liquidizer);
         gameScreenUI = new GameScreenUI();
     }
-    Array<Elixir> blueElixir = new Array<Elixir>();
+
+    Array<Elixir> elixirs = new Array<Elixir>();
+    private boolean isPressed = false;
 
     @Override
     public void configureForData (LevelData data) { }
@@ -45,11 +50,18 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public void render() {
 
-        fillWithElixir(10, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !isPressed) {
+            fillWithElixir(5, 0);
+            isPressed = true;
+        } else if(!Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            isPressed = false;
+        }
 
         if(isElixirFlowing) {
-            for (int i=0; i<blueElixir.size; i++) {
-                blueElixir.get(i).draw();
+            for (int i = 0; i<elixirs.size; i++) {
+                for (int j = 0; j<elixirs.get(0).elixirParticles.size; j++) {
+                    elixirs.get(i).elixirParticles.get(j).draw();
+                }
             }
         }
 
@@ -94,18 +106,25 @@ public class Gameplay extends GameScreen implements IGameplay {
     }
 
     private void fillWithElixir(int length, int startIndex) {
-        for (int i=0; i<length; i++) {
-            blueElixir.add(new Elixir(startIndex+i*3, elixirTexture));
-            blueElixir.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
-            this.addActor(blueElixir.get(i).image);
-        }
+        elixirs.add(new Elixir(length, startIndex));
         isElixirFlowing = true;
     }
 
     public class Elixir {
+        Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
+        public Elixir(int length, int startIndex) {
+            for (int i=0; i<length; i++) {
+                elixirParticles.add(new ElixirParticle(startIndex+i*3, elixirTexture));
+                elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
+                addActor(elixirParticles.get(i).image);
+            }
+        }
+    }
+
+    public class ElixirParticle {
         public int currentIndex;
         public Image image;
-        public Elixir(int currentIndex, Texture image) {
+        public ElixirParticle(int currentIndex, Texture image) {
             this.image = new Image(image);
 //            this.image.scaleBy((float)Math.random()*0.5f);
             this.currentIndex = currentIndex;
