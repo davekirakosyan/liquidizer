@@ -25,7 +25,6 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] curvePoints = new Vector2[steps];
 
     private Image elixir;
-    private Image flask1;
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
@@ -41,7 +40,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         batch = new SpriteBatch();
 
         elixir = new Image(new Texture("elixir-particle.png") );
-        flask1 = new Image(new Texture("flask1.png") );
 
         controlPoints[0] = new Vector2(300, 300);
         controlPoints[1] = new Vector2(300, 500);
@@ -67,8 +65,6 @@ public class Gameplay extends GameScreen implements IGameplay {
             curvePoints[i] = new Vector2(st.x, st.y);
         }
         sr.end();
-
-        this.addActor(flask1);
     }
 
     public class SubstanceActor extends Actor {
