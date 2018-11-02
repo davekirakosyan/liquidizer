@@ -45,6 +45,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         sr = new ShapeRenderer();
         sr.setAutoShapeType(true);
+//        sdfa
 
         controlPoints[0] = new Vector2(300, 300);
         controlPoints[1] = new Vector2(300, 500);
