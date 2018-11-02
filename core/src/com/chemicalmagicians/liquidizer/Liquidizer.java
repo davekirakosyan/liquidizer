@@ -14,7 +14,7 @@ import com.chemicalmagicians.liquidizer.interfaces.GameController;
 
 public class Liquidizer extends ApplicationAdapter {
 
-	private Stage stage;
+	public Stage stage;
 	private PolygonSpriteBatch batch;
 
 
@@ -30,7 +30,7 @@ public class Liquidizer extends ApplicationAdapter {
 	public void create () {
 		OrthographicCamera camera = new OrthographicCamera();
 		batch = new PolygonSpriteBatch();
-		ExtendViewport extendViewport = new ExtendViewport(1920, 1080, 2000, 1920, camera);
+		ExtendViewport extendViewport = new ExtendViewport(1920, 1080, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
 
 		//Load and init
@@ -50,8 +50,8 @@ public class Liquidizer extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-//		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		gameplay.render();
 
