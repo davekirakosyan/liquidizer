@@ -14,7 +14,7 @@ import com.chemicalmagicians.liquidizer.interfaces.GameController;
 
 public class Liquidizer extends ApplicationAdapter {
 
-	private Stage stage;
+	public Stage stage;
 	private PolygonSpriteBatch batch;
 
 

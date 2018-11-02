@@ -1,14 +1,13 @@
 package com.chemicalmagicians.liquidizer.gamescreens;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
 import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.data.LevelData;
@@ -17,8 +16,6 @@ import com.chemicalmagicians.liquidizer.ui.*;
 
 public class Gameplay extends GameScreen implements IGameplay {
 
-    private SpriteBatch batch;
-
     private CatmullRomSpline<Vector2> path;
     private ShapeRenderer sr;
     private int steps = 300;
@@ -26,26 +23,51 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] curvePoints = new Vector2[steps];
     private GameScreenUI gameScreenUI;
 
-    private Image elixir;
+    private Texture elixirTexture;
+
+    private boolean isElixirFlowing = false;
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
         gameScreenUI = new GameScreenUI();
     }
+    Array<Elixir> blueElixir = new Array<Elixir>();
 
     @Override
-    public void configureForData (LevelData data) {
-
-    }
+    public void configureForData (LevelData data) { }
 
     @Override
     public void start () {
-        batch = new SpriteBatch();
-        elixir = new Image(new Texture("elixir-particle.png") );
+        elixirTexture = new Texture("elixir-particle.png");
 
+        createCurve();
+    }
+
+    public void render() {
+
+        fillWithElixir(10, 0);
+
+        if(isElixirFlowing) {
+            for (int i=0; i<blueElixir.size; i++) {
+                blueElixir.get(i).draw();
+            }
+        }
+
+        //converting from touch to stage coordinates    -- todo: don't delete the comments below
+//        Batch batch = liquidizer.stage.getBatch();
+//
+//        batch.begin();
+//        Vector3 temp = new Vector3();
+//        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+//        batch.draw(elixirTexture, temp.x, temp.y, 64, 64);
+//        batch.end();
+
+    }
+
+    private void createCurve() {
         sr = new ShapeRenderer();
+        sr.setProjectionMatrix(liquidizer.stage.getViewport().getCamera().combined);
         sr.setAutoShapeType(true);
-//        sdfa
 
         controlPoints[0] = new Vector2(300, 300);
         controlPoints[1] = new Vector2(300, 500);
@@ -54,8 +76,6 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         path = new CatmullRomSpline<Vector2>(controlPoints, true);
 
-        elixir.setPosition(100, 100);
-        this.addActor(elixir);
         sr.setColor(Color.RED);
         sr.begin();
         for (int i = 0; i < steps; ++i) {
@@ -73,16 +93,33 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     }
 
-    private int elixirCurrentPos = 0;
-    public void render() {
-        elixir.setPosition(curvePoints[elixirCurrentPos].x, Gdx.graphics.getHeight()-curvePoints[elixirCurrentPos].y);
-        if (elixirCurrentPos < curvePoints.length-1) {
-            elixirCurrentPos++;
-        } else {
-            elixirCurrentPos = 0;
+    private void fillWithElixir(int length, int startIndex) {
+        for (int i=0; i<length; i++) {
+            blueElixir.add(new Elixir(startIndex+i*3, elixirTexture));
+            blueElixir.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
+            this.addActor(blueElixir.get(i).image);
         }
-
-
+        isElixirFlowing = true;
     }
 
+    public class Elixir {
+        public int currentIndex;
+        public Image image;
+        public Elixir(int currentIndex, Texture image) {
+            this.image = new Image(image);
+//            this.image.scaleBy((float)Math.random()*0.5f);
+            this.currentIndex = currentIndex;
+        }
+
+        public void draw() {
+            if(currentIndex < curvePoints.length-1) {
+                image.setPosition(curvePoints[currentIndex+1].x, curvePoints[currentIndex+1].y);
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+                image.setPosition(curvePoints[currentIndex].x, curvePoints[currentIndex].y);
+                currentIndex++;
+            }
+        }
+    }
 }
