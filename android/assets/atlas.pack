@@ -17,37 +17,44 @@ glass-path
   orig: 874, 424
   offset: 0, 0
   index: -1
-flask1
+blue
   rotate: false
   xy: 1284, 2
-  size: 261, 298
-  orig: 261, 298
+  size: 109, 127
+  orig: 109, 127
   offset: 0, 0
   index: -1
-red-flask-md
+green
   rotate: false
-  xy: 1284, 2
-  size: 261, 298
-  orig: 261, 298
+  xy: 1284, 131
+  size: 109, 126
+  orig: 109, 126
+  offset: 0, 0
+  index: -1
+red
+  rotate: false
+  xy: 1284, 259
+  size: 107, 126
+  orig: 107, 126
   offset: 0, 0
   index: -1
 settings-button
   rotate: false
-  xy: 1284, 302
+  xy: 1395, 2
   size: 111, 111
   orig: 111, 111
   offset: 0, 0
   index: -1
 restart-button
   rotate: false
-  xy: 1397, 302
+  xy: 1284, 387
   size: 92, 92
   orig: 92, 92
   offset: 0, 0
   index: -1
 elixir-particle
   rotate: false
-  xy: 1491, 302
+  xy: 1284, 481
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
