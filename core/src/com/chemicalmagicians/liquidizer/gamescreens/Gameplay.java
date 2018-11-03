@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
 import com.chemicalmagicians.liquidizer.Liquidizer;
@@ -43,15 +44,27 @@ public class Gameplay extends GameScreen implements IGameplay {
     private boolean isPressed = false;
     private boolean isElixirFlowing = false;
 
+    private Group colb;
+    public Group singleElixir;
+    private Group elixirGroup=new Group();
+
     // todo: fill intersectPointIndexes array dynamically from data source
     Vector2 intersectPointIndexes[] = new Vector2[] {new Vector2(112, 262)};
 
-
+    private TextureAtlas atlas;
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
-        gameScreenUI = new GameScreenUI();
+        atlas=new TextureAtlas(Gdx.files.internal("atlas.pack"));
+        Image glassPath = new Image(atlas.findRegion("glass-path"));
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        colb=new Group();
+        glassPath.setOrigin(Align.center);
+        glassPath.setPosition(200,150);
+        colb.addActor(glassPath);
+        gameScreenUI = new GameScreenUI();
+        addActor(elixirGroup);
+        addActor(colb);
     }
 
 
@@ -91,6 +104,7 @@ public class Gameplay extends GameScreen implements IGameplay {
                 }
             }
         }
+
 
         checkIntersections();
 
@@ -168,7 +182,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
             this.length = length;
-            Group group = new Group() {
+            singleElixir = new Group() {
                 @Override
                 public void act(float delta) {
                     super.act(delta);
@@ -197,9 +211,10 @@ public class Gameplay extends GameScreen implements IGameplay {
             for (int i=0; i<length; i++) {
                 elixirParticles.add(new ElixirParticle(startIndex+i, elixirTexture, color));
                 elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
-                group.addActor(elixirParticles.get(i).image);
+                singleElixir.addActor(elixirParticles.get(i).image);
             }
-            addActor(group);
+
+            elixirGroup.addActor(singleElixir);
         }
     }
 
@@ -210,7 +225,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-//            this.image.scaleBy((float)Math.random()*0.15f);
+            this.image.scaleBy((float)Math.random()*0.15f);
             this.currentIndex = currentIndex;
         }
 

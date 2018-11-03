@@ -5,7 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import com.chemicalmagicians.liquidizer.gamescreens.LevelSelection;
@@ -46,6 +50,7 @@ public class Liquidizer extends ApplicationAdapter {
 
 		gameplay.start();
 		stage.addActor(gameplay);
+
 	}
 
 	@Override

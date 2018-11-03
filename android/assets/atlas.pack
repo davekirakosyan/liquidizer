@@ -3,37 +3,44 @@ Liquidizer atlas1.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-flask1
+glass-path
   rotate: false
   xy: 2, 2
-  size: 456, 596
-  orig: 456, 596
+  size: 874, 424
+  orig: 874, 424
+  offset: 0, 0
+  index: -1
+flask1
+  rotate: false
+  xy: 2, 428
+  size: 261, 298
+  orig: 261, 298
   offset: 0, 0
   index: -1
 red-flask-md
   rotate: false
-  xy: 2, 600
+  xy: 2, 428
   size: 261, 298
   orig: 261, 298
   offset: 0, 0
   index: -1
 settings-button
   rotate: false
-  xy: 2, 900
-  size: 112, 112
-  orig: 112, 112
+  xy: 878, 2
+  size: 111, 111
+  orig: 111, 111
   offset: 0, 0
   index: -1
 restart-button
   rotate: false
-  xy: 116, 900
-  size: 88, 88
-  orig: 88, 88
+  xy: 878, 115
+  size: 92, 92
+  orig: 92, 92
   offset: 0, 0
   index: -1
 elixir-particle
   rotate: false
-  xy: 460, 2
+  xy: 972, 115
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
