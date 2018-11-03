@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
@@ -64,11 +66,14 @@ public class Gameplay extends GameScreen implements IGameplay {
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         colb=new Group();
         glassPath.setOrigin(Align.center);
-        glassPath.setPosition(200,150);
+        glassPath.setPosition(200,120);
         colb.addActor(glassPath);
         gameScreenUI = new GameScreenUI();
         addActor(elixirGroup);
         addActor(colb);
+
+        setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+
     }
 
     @Override
@@ -110,15 +115,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
                 temp.y < curvePoints[i].y+50 && temp.y > curvePoints[i].y+40 ) {
                 if(Gdx.input.isTouched() && !isJustClicked) {
-                    if(i>=0 && i<=75) {
-                        fillWithElixir(20, 75 - i, Color.RED);
-                    } else if(i>75 && i<=150) {
-                        fillWithElixir(20, 300-(i-75), Color.RED);
-                    } else if(i>150 && i<=225) {
-                        fillWithElixir(20, 375-i, Color.RED);
-                    } else {
-                        fillWithElixir(20, 150-(i-225), Color.RED);
-                    }
+                        fillWithElixir(20, i, Color.RED);
                     isJustClicked = true;
                 } else if(!Gdx.input.isTouched()) {
                     isJustClicked = false;
@@ -185,23 +182,23 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
     }
 
-    private void mixElixirs(Elixir elixirA, Elixir elixirB, int startIndex) {
+	private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
 
-        if (!isMixing) {
-            if( (elixirA.color == Color.RED && elixirB.color == Color.YELLOW) ||
-                (elixirB.color == Color.RED && elixirA.color == Color.YELLOW) ) {
-                fillWithElixir(elixirA.length, startIndex, Color.ORANGE);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
-            } else if( (elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) ||
-                (elixirB.color == Color.GREEN && elixirA.color == Color.YELLOW) ) {
-                fillWithElixir(elixirA.length, startIndex, Color.CYAN);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
-            }
+		if (!isMixing) {
+			if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
+				&& elixirA.color == Color.YELLOW)) {
+				fillWithElixir(elixirA.length, startIndex, Color.ORANGE);
+				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+				isMixing = true;
+			} else if ((elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) || (elixirB.color == Color.GREEN
+				&& elixirA.color == Color.YELLOW)) {
+				fillWithElixir(elixirA.length, startIndex, Color.CYAN);
+				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+				isMixing = true;
+			}
 
-        }
-    }
+		}
+	}
 
     private void createCurve() {
         sr = new ShapeRenderer();
@@ -250,7 +247,6 @@ public class Gameplay extends GameScreen implements IGameplay {
             singleElixir = new Group() {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
-
                     batch.flush();
                     buffer.begin();
                     Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -259,9 +255,13 @@ public class Gameplay extends GameScreen implements IGameplay {
                     batch.flush();
                     buffer.end();
 
+
+                    batch.setProjectionMatrix(batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
                     batch.setShader(metaBallShader);
-                    batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                    batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1f, 1);
                     batch.setShader(null);
+
+                    batch.setProjectionMatrix(Gameplay.this.getStage().getViewport().getCamera().combined);
 
                 }
             };
