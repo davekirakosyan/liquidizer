@@ -16,7 +16,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
@@ -25,7 +28,9 @@ import com.chemicalmagicians.liquidizer.data.LevelData;
 import com.chemicalmagicians.liquidizer.interfaces.IGameplay;
 import com.chemicalmagicians.liquidizer.ui.*;
 
-public class Gameplay extends GameScreen implements IGameplay {
+import java.util.EventListener;
+
+public class Gameplay extends GameScreen implements IGameplay, EventListener {
 
     private CatmullRomSpline<Vector2> path;
     private ShapeRenderer sr;
@@ -70,7 +75,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(30, 0, Color.RED);
+            fillWithElixir(30, 0, new Color(0.4f,0.11f,0.25f,1f));
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
             fillWithElixir(30, 0, Color.GREEN);
@@ -181,7 +186,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-//            this.image.scaleBy((float)Math.random()*0.5f);
+//            this.image.scaleBy((float)Math.random()*0.15f);
             this.currentIndex = currentIndex;
         }
 
