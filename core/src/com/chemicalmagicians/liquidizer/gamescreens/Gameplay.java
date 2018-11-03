@@ -2,6 +2,7 @@ package com.chemicalmagicians.liquidizer.gamescreens;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -31,13 +30,15 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private Sprite elixirTexture;
 
+    Array<Elixir> elixirs = new Array<Elixir>();
+    private boolean isPressed = false;
     private boolean isElixirFlowing = false;
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
         gameScreenUI = new GameScreenUI();
     }
-    Array<Elixir> blueElixir = new Array<Elixir>();
+
 
     @Override
     public void configureForData (LevelData data) { }
@@ -52,11 +53,22 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public void render() {
 
-        fillWithElixir(10, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
+            fillWithElixir(5, 0, Color.RED);
+            isPressed = true;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
+            fillWithElixir(5, 0, Color.GREEN);
+            isPressed = true;
+        } else if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
+            isPressed = false;
+        }
+
 
         if(isElixirFlowing) {
-            for (int i=0; i<blueElixir.size; i++) {
-                blueElixir.get(i).draw();
+            for (int i = 0; i<elixirs.size; i++) {
+                for (int j = 0; j<elixirs.get(0).elixirParticles.size; j++) {
+                    elixirs.get(i).elixirParticles.get(j).draw();
+                }
             }
         }
 
@@ -64,8 +76,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        Batch batch = liquidizer.stage.getBatch();
 //
 //        batch.begin();
-        Vector3 temp = new Vector3();
-        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+//        Vector3 temp = new Vector3();
+//        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 //        batch.draw(elixirTexture, temp.x, temp.y, 64, 64);
 //        batch.end();
 
@@ -100,20 +112,28 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     }
 
-    private void fillWithElixir(int length, int startIndex) {
-        for (int i=0; i<length; i++) {
-            blueElixir.add(new Elixir(startIndex+i*3, elixirTexture));
-            blueElixir.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
-            this.addActor(blueElixir.get(i).image);
-        }
+    private void fillWithElixir(int length, int startIndex, Color color) {
+        elixirs.add(new Elixir(length, startIndex, color));
         isElixirFlowing = true;
     }
 
     public class Elixir {
+        Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
+        public Elixir(int length, int startIndex, Color color) {
+            for (int i=0; i<length; i++) {
+                elixirParticles.add(new ElixirParticle(startIndex+i*3, elixirTexture, color));
+                elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
+                addActor(elixirParticles.get(i).image);
+            }
+        }
+    }
+
+    public class ElixirParticle {
         public int currentIndex;
         public Image image;
-        public Elixir(int currentIndex, Sprite image) {
+        public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
+            this.image.setColor(color);
 //            this.image.scaleBy((float)Math.random()*0.5f);
             this.currentIndex = currentIndex;
         }

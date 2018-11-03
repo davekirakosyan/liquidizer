@@ -1,0 +1,40 @@
+
+Liquidizer atlas1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flask1
+  rotate: false
+  xy: 2, 2
+  size: 456, 596
+  orig: 456, 596
+  offset: 0, 0
+  index: -1
+red-flask-md
+  rotate: false
+  xy: 2, 600
+  size: 261, 298
+  orig: 261, 298
+  offset: 0, 0
+  index: -1
+settings-button
+  rotate: false
+  xy: 2, 900
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+restart-button
+  rotate: false
+  xy: 116, 900
+  size: 88, 88
+  orig: 88, 88
+  offset: 0, 0
+  index: -1
+elixir-particle
+  rotate: false
+  xy: 460, 2
+  size: 45, 45
+  orig: 45, 45
+  offset: 0, 0
+  index: -1
