@@ -52,6 +52,8 @@ public class Gameplay extends GameScreen implements IGameplay {
     public Group singleElixir;
     private Group elixirGroup=new Group();
 
+    public static Color currentUsingColor = new Color();
+
     Level level1;
 
     // todo: fill intersectPointIndexes array dynamically from data source
@@ -80,26 +82,16 @@ public class Gameplay extends GameScreen implements IGameplay {
         elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
 
         metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
-        if (!metaBallShader.isCompiled()) {
-            //System.out.println(metaBallShader.getLog());
-        }
 
         level1 = new Level("No Overlapping", new Color[] {Color.RED, Color.YELLOW}, false, 20);
 
+        currentUsingColor = Color.GOLD;
 
         createCurve();
     }
 
-    boolean isJustClicked = false;
+    private boolean isJustClicked = false;
     public void render() {
-        getStage().getRoot().setTouchable(Touchable.enabled);
-        getStage().getRoot().addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //System.out.println("I got clicked!");
-            }
-        });
-
         Vector3 temp = new Vector3();
         liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
@@ -108,22 +100,22 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         for(int i=0; i<curvePoints.length; i++) {
             if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
-                temp.y < curvePoints[i].y+50 && temp.y > curvePoints[i].y+40 ) {
+                temp.y < curvePoints[i].y+100 && temp.y > curvePoints[i].y+70 ) {
                 if(Gdx.input.isTouched() && !isJustClicked) {
                     if(i>=0 && i<=75) {
-                        fillWithElixir(20, 75 - i, Color.RED);
+                        fillWithElixir(20, 75 - i, currentUsingColor);
                     } else if(i>75 && i<=150) {
-                        fillWithElixir(20, 300-(i-75), Color.RED);
+                        fillWithElixir(20, 300-(i-75), currentUsingColor);
                     } else if(i>150 && i<=225) {
-                        fillWithElixir(20, 375-i, Color.RED);
+                        fillWithElixir(20, 375-i, currentUsingColor);
                     } else {
-                        fillWithElixir(20, 150-(i-225), Color.RED);
+                        fillWithElixir(20, 150-(i-225), currentUsingColor);
                     }
                     isJustClicked = true;
                 } else if(!Gdx.input.isTouched()) {
                     isJustClicked = false;
                 }
-                batch.draw(elixirTexture, curvePoints[i].x, curvePoints[i].y, 64, 64);
+                batch.draw(elixirTexture, curvePoints[i].x-20, curvePoints[i].y+20, 60, 60);
             }
         }
         batch.end();

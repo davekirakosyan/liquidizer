@@ -2,6 +2,7 @@ package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,19 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 
 public class GameScreenUI extends Table {
 	private TextureAtlas atlas;
-	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
-	int indexOfImageArray;
-
 
 	public GameScreenUI(){
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
 		addActor(elixirs());
 		addActor(controlBar());
-//		inputMultiplexer.addProcessor(getStage());
-//		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	private Table elixirs(){
@@ -34,18 +31,77 @@ public class GameScreenUI extends Table {
 		Table rightTopAlignedTable = new Table();
 
 		rightTopAlignedTable.setTouchable(Touchable.enabled);
-		for (indexOfImageArray=0;indexOfImageArray<flasks().size;indexOfImageArray++) {
-			final Image flask=flasks().get(indexOfImageArray);
-			flask.scaleBy(-0.2f);
-			rightTopAlignedTable.add(flask);
-			flask.addListener(new ClickListener(){
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.println("asaa");
-				}
-			});
-			rightTopAlignedTable.row().padTop(-10);
-		}
+
+
+
+		Image redFlask=flasks().get(0);
+		rightTopAlignedTable.add(redFlask);
+		redFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.RED;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		Image greenFlask=flasks().get(1);
+		rightTopAlignedTable.add(greenFlask);
+		greenFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.GREEN;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		Image blueFlask=flasks().get(2);
+		rightTopAlignedTable.add(blueFlask);
+		blueFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.BLUE;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		Image yellowFlask=flasks().get(3);
+		rightTopAlignedTable.add(yellowFlask);
+		yellowFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.YELLOW;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		Image purpleFlask=flasks().get(4);
+		rightTopAlignedTable.add(purpleFlask);
+		purpleFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.PURPLE;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		Image orangeFlask=flasks().get(5);
+		rightTopAlignedTable.add(orangeFlask);
+		orangeFlask.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gameplay.currentUsingColor = Color.ORANGE;
+			}
+		});
+		rightTopAlignedTable.row().padTop(-10);
+
+		redFlask.scaleBy(-0.2f);
+		greenFlask.scaleBy(-0.2f);
+		blueFlask.scaleBy(-0.2f);
+		purpleFlask.scaleBy(-0.2f);
+		yellowFlask.scaleBy(-0.2f);
+		orangeFlask.scaleBy(-0.2f);
+
+
 		elixir.top().right();
 		elixir.add(rightTopAlignedTable);
 
@@ -77,5 +133,6 @@ public class GameScreenUI extends Table {
 		flaskArray.add(new Image(atlas.findRegion("orange")));
 		return flaskArray;
 	}
+
 
 }
