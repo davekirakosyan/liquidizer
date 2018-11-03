@@ -4,12 +4,18 @@ package com.chemicalmagicians.liquidizer.gamescreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
@@ -30,13 +36,18 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private Sprite elixirTexture;
 
+    private ShaderProgram metaBallShader;
+
     Array<Elixir> elixirs = new Array<Elixir>();
     private boolean isPressed = false;
     private boolean isElixirFlowing = false;
 
+    private FrameBuffer buffer;
+
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
         gameScreenUI = new GameScreenUI();
+        buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
 
@@ -48,16 +59,21 @@ public class Gameplay extends GameScreen implements IGameplay {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
         elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
 
+        metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
+        if (!metaBallShader.isCompiled()) {
+            System.out.println(metaBallShader.getLog());
+        }
+
         createCurve();
     }
 
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(5, 0, Color.RED);
+            fillWithElixir(30, 0, Color.RED);
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
-            fillWithElixir(5, 0, Color.GREEN);
+            fillWithElixir(30, 0, Color.GREEN);
             isPressed = true;
         } else if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
             isPressed = false;
@@ -123,13 +139,41 @@ public class Gameplay extends GameScreen implements IGameplay {
     public class Elixir {
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
+            Group group = new Group() {
+                @Override
+                public void act(float delta) {
+                    super.act(delta);
+//                    metaBallShader.dispose();
+//                    metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
+
+                }
+
+                @Override
+                public void draw(Batch batch, float parentAlpha) {
+
+                    batch.flush();
+                    buffer.begin();
+                    Gdx.gl.glClearColor(0, 0, 0, 0);
+                    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                    super.draw(batch, parentAlpha);
+                    batch.flush();
+                    buffer.end();
+
+                    batch.setShader(metaBallShader);
+                    batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                    batch.setShader(null);
+
+                }
+            };
             for (int i=0; i<length; i++) {
-                elixirParticles.add(new ElixirParticle(startIndex+i*3, elixirTexture, color));
+                elixirParticles.add(new ElixirParticle(startIndex+i, elixirTexture, color));
                 elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
-                addActor(elixirParticles.get(i).image);
+                group.addActor(elixirParticles.get(i).image);
             }
+            addActor(group);
         }
     }
+
 
     public class ElixirParticle {
         public int currentIndex;
