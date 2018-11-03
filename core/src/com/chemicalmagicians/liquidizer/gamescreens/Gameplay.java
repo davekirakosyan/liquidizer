@@ -81,7 +81,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
         if (!metaBallShader.isCompiled()) {
-            System.out.println(metaBallShader.getLog());
+            //System.out.println(metaBallShader.getLog());
         }
 
         level1 = new Level("No Overlapping", new Color[] {Color.RED, Color.YELLOW}, false, 20);
@@ -96,7 +96,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         getStage().getRoot().addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("I got clicked!");
+                //System.out.println("I got clicked!");
             }
         });
 
@@ -109,7 +109,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         for(int i=0; i<curvePoints.length; i++) {
             if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
                 temp.y < curvePoints[i].y+50 && temp.y > curvePoints[i].y+40 ) {
-                System.out.println(i);
                 if(Gdx.input.isTouched() && !isJustClicked) {
                     if(i>=0 && i<=75) {
                         fillWithElixir(20, 75 - i, Color.RED);

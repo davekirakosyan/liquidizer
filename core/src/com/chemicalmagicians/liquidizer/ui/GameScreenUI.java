@@ -2,23 +2,26 @@ package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreenUI extends Table {
 	private TextureAtlas atlas;
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+	int indexOfImageArray;
+
 
 	public GameScreenUI(){
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
 		addActor(elixirs());
 		addActor(controlBar());
-
 //		inputMultiplexer.addProcessor(getStage());
 //		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
@@ -31,21 +34,20 @@ public class GameScreenUI extends Table {
 		Table rightTopAlignedTable = new Table();
 
 		rightTopAlignedTable.setTouchable(Touchable.enabled);
-
-		for (Image flask:flasks()) {
-			rightTopAlignedTable.add(flask).size(70);
+		for (indexOfImageArray=0;indexOfImageArray<flasks().size;indexOfImageArray++) {
+			final Image flask=flasks().get(indexOfImageArray);
+			flask.scaleBy(-0.2f);
+			rightTopAlignedTable.add(flask);
 			flask.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					System.out.println("I got clicked!");
+					System.out.println("asaa");
 				}
 			});
-			rightTopAlignedTable.row().padTop(20);
-			rightTopAlignedTable.row().padTop(10);
+			rightTopAlignedTable.row().padTop(-10);
 		}
-
 		elixir.top().right();
-		elixir.add(rightTopAlignedTable).pad(20);
+		elixir.add(rightTopAlignedTable);
 
 		return elixir;
 	}
@@ -70,6 +72,9 @@ public class GameScreenUI extends Table {
 		flaskArray.add(new Image(atlas.findRegion("red")));
 		flaskArray.add(new Image(atlas.findRegion("green")));
 		flaskArray.add(new Image(atlas.findRegion("blue")));
+		flaskArray.add(new Image(atlas.findRegion("yellow")));
+		flaskArray.add(new Image(atlas.findRegion("purple")));
+		flaskArray.add(new Image(atlas.findRegion("orange")));
 		return flaskArray;
 	}
 
