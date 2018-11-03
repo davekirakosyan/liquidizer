@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
 import com.chemicalmagicians.liquidizer.Liquidizer;
@@ -74,7 +72,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(20, 0, new Color(0.4f,0.11f,0.25f,1f));
+            fillWithElixir(20, 0,Color.RED);
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
             fillWithElixir(20, 0, Color.GREEN);
@@ -112,20 +110,27 @@ public class Gameplay extends GameScreen implements IGameplay {
                  elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].x) ||
                 (elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
                  elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].y) ) {
-//                System.out.println(i);
-
                 for(int j=0; j<elixirs.size; j++) {
                     if(i!=j) {
                         if ((elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
                              elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].x) ||
                             (elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
                              elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].y)) {
-                            System.out.println("66666666");
+                            mixElixirs(elixirs.get(i), elixirs.get(j), elixirs.get(i).elixirParticles.first().currentIndex);
                         }
                     }
                 }
 
             }
+        }
+    }
+
+    private boolean isMixing = false;
+    private void mixElixirs(Elixir elixirA, Elixir elixirB, int startIndex) {
+        if (!isMixing) {
+            isMixing = true;
+            fillWithElixir(elixirA.length+elixirB.length, startIndex, Color.YELLOW);
+//            elixirA.removeElixir();
         }
     }
 
@@ -165,18 +170,11 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public class Elixir {
         public int length = 0;
+        Group group;
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
             this.length = length;
-            Group group = new Group() {
-                @Override
-                public void act(float delta) {
-                    super.act(delta);
-//                    metaBallShader.dispose();
-//                    metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
-
-                }
-
+            group = new Group() {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
 
@@ -194,15 +192,19 @@ public class Gameplay extends GameScreen implements IGameplay {
 
                 }
             };
-            for (int i=0; i<length; i++) {
+            for (int i=0; i< length; i++) {
                 elixirParticles.add(new ElixirParticle(startIndex+i, elixirTexture, color));
                 elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
                 group.addActor(elixirParticles.get(i).image);
             }
             addActor(group);
         }
-    }
 
+        public void removeElixir() {
+            group.remove();
+        }
+
+    }
 
     public class ElixirParticle {
         public int currentIndex;
@@ -225,4 +227,6 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
         }
     }
+
+//    public enum COLORS { RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE }
 }
