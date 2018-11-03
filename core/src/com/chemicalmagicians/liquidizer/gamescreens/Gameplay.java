@@ -144,8 +144,9 @@ public class Gameplay extends GameScreen implements IGameplay {
     private void mixElixirs(Elixir elixirA, Elixir elixirB, int startIndex) {
         if (!isMixing) {
             isMixing = true;
-            fillWithElixir(elixirA.length+elixirB.length, startIndex, Color.YELLOW);
-//            elixirA.removeElixir();
+            System.out.println(elixirGroup.getChildren().items.length);
+            fillWithElixir(elixirA.length, startIndex, Color.YELLOW);
+            elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
         }
     }
 
@@ -183,8 +184,11 @@ public class Gameplay extends GameScreen implements IGameplay {
         isElixirFlowing = true;
     }
 
+    private int p = 0;
+
     public class Elixir {
         public int length = 0;
+        public int elixirPersonalIndex = 0;
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
             this.length = length;
@@ -213,10 +217,21 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
 
             elixirGroup.addActor(singleElixir);
+
+            this.elixirPersonalIndex = p;
+            p++;
         }
 
-        public void removeElixir() {
+        public void removeElixir(int index1, int index2) {
+            System.out.println(new Vector2(index1, index2));
+            elixirGroup.removeActor(elixirGroup.getChildren().items[index1]);
 
+            if(index1<index2) {
+                elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
+            } else {
+                elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
+            }
+            elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
         }
 
     }
