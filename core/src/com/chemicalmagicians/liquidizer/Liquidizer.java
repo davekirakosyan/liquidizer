@@ -36,7 +36,7 @@ public class Liquidizer extends ApplicationAdapter {
 		batch = new PolygonSpriteBatch();
 		ExtendViewport extendViewport = new ExtendViewport(1280,720, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
-
+		Gdx.input.setInputProcessor(stage);	// todo: KAREVOR TOX
 		//Load and init
 
 		//load
