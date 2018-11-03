@@ -1,12 +1,18 @@
 package com.chemicalmagicians.liquidizer.gamescreens;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
 import com.chemicalmagicians.liquidizer.Liquidizer;
@@ -23,7 +29,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] curvePoints = new Vector2[steps];
     private GameScreenUI gameScreenUI;
 
-    private Texture elixirTexture;
+    private Sprite elixirTexture;
 
     private boolean isElixirFlowing = false;
 
@@ -38,7 +44,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     @Override
     public void start () {
-        elixirTexture = new Texture("elixir-particle.png");
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
+        elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
 
         createCurve();
     }
@@ -57,8 +64,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        Batch batch = liquidizer.stage.getBatch();
 //
 //        batch.begin();
-//        Vector3 temp = new Vector3();
-//        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+        Vector3 temp = new Vector3();
+        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 //        batch.draw(elixirTexture, temp.x, temp.y, 64, 64);
 //        batch.end();
 
@@ -89,7 +96,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
         sr.end();
         setFillParent(true);
-        add(gameScreenUI).expand().right().top();
+        add(gameScreenUI).grow();
 
     }
 
@@ -105,7 +112,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public class Elixir {
         public int currentIndex;
         public Image image;
-        public Elixir(int currentIndex, Texture image) {
+        public Elixir(int currentIndex, Sprite image) {
             this.image = new Image(image);
 //            this.image.scaleBy((float)Math.random()*0.5f);
             this.currentIndex = currentIndex;

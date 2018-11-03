@@ -7,7 +7,7 @@ import com.chemicalmagicians.liquidizer.Liquidizer;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1280;
+		config.width = 1380;
 		config.height = 720;
 		new LwjglApplication(new Liquidizer(), config);
 	}

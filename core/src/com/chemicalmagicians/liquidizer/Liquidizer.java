@@ -30,7 +30,7 @@ public class Liquidizer extends ApplicationAdapter {
 	public void create () {
 		OrthographicCamera camera = new OrthographicCamera();
 		batch = new PolygonSpriteBatch();
-		ExtendViewport extendViewport = new ExtendViewport(1920, 1080, 4000, 1920, camera);
+		ExtendViewport extendViewport = new ExtendViewport(1280,720, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
 
 		//Load and init
