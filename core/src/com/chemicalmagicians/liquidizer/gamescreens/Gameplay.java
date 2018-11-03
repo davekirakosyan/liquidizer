@@ -37,12 +37,16 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Sprite elixirTexture;
 
     private ShaderProgram metaBallShader;
+    private FrameBuffer buffer;
 
     Array<Elixir> elixirs = new Array<Elixir>();
     private boolean isPressed = false;
     private boolean isElixirFlowing = false;
 
-    private FrameBuffer buffer;
+    // todo: fill intersectPointIndexes array dynamically from data source
+    Vector2 intersectPointIndexes[] = new Vector2[] {new Vector2(112, 262)};
+
+
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
@@ -70,10 +74,10 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(30, 0, Color.RED);
+            fillWithElixir(20, 0, Color.RED);
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
-            fillWithElixir(30, 0, Color.GREEN);
+            fillWithElixir(20, 0, Color.GREEN);
             isPressed = true;
         } else if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
             isPressed = false;
@@ -88,7 +92,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
         }
 
-
+        checkIntersections();
 
 
         //converting from touch to stage coordinates    -- todo: don't delete the comments below
@@ -100,6 +104,29 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        batch.draw(elixirTexture, temp.x, temp.y, 64, 64);
 //        batch.end();
 
+    }
+
+    private void checkIntersections() {
+        for(int i=0; i<elixirs.size; i++) {
+            if ((elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
+                 elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].x) ||
+                (elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
+                 elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].y) ) {
+//                System.out.println(i);
+
+                for(int j=0; j<elixirs.size; j++) {
+                    if(i!=j) {
+                        if ((elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
+                             elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].x) ||
+                            (elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
+                             elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].y)) {
+                            System.out.println("66666666");
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     private void createCurve() {
@@ -137,8 +164,10 @@ public class Gameplay extends GameScreen implements IGameplay {
     }
 
     public class Elixir {
+        public int length = 0;
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
+            this.length = length;
             Group group = new Group() {
                 @Override
                 public void act(float delta) {
