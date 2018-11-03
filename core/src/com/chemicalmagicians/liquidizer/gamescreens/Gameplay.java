@@ -5,10 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.chemicalmagicians.liquidizer.GameScreen;
 import com.chemicalmagicians.liquidizer.Liquidizer;
@@ -25,7 +28,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] curvePoints = new Vector2[steps];
     private GameScreenUI gameScreenUI;
 
-    private Texture elixirTexture;
+    private Sprite elixirTexture;
 
     Array<Elixir> elixirs = new Array<Elixir>();
     private boolean isPressed = false;
@@ -42,7 +45,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     @Override
     public void start () {
-        elixirTexture = new Texture("elixir-particle.png");
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
+        elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
 
         createCurve();
     }
@@ -107,7 +111,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
         sr.end();
         setFillParent(true);
-        add(gameScreenUI).expand().right().top();
+        add(gameScreenUI).grow();
 
     }
 
@@ -130,7 +134,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public class ElixirParticle {
         public int currentIndex;
         public Image image;
-        public ElixirParticle(int currentIndex, Texture image, Color color) {
+        public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
 //            this.image.scaleBy((float)Math.random()*0.5f);

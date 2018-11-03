@@ -1,44 +1,55 @@
 package com.chemicalmagicians.liquidizer.ui;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreenUI extends Table {
-	private Image blueFlask;
-	private Image redFlask;
+	private TextureAtlas atlas;
 	public GameScreenUI(){
-		blueFlask = new Image(new Texture("flask1.png"));
-		redFlask = new Image(new Texture("red-flask-md.png"));
-		add(elixirs());
+		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
+		addActor(elixirs());
+		addActor(controlBar());
 	}
 
-	public Table elixirs(){
+	private Table elixirs(){
 		Table elixir = new Table();
-		elixir.setTouchable(Touchable.enabled);
-		debugAll();
+		elixir.setFillParent(true);
+
+		Table rightTopAlignedTable = new Table();
+
 		for (Image flask:flasks()) {
-			elixir.add(flask).size(100);
-//			flask.addListener(new ClickListener(){
-//				@Override
-//				public void clicked(InputEvent event, float x, float y) {
-//					System.out.println("I got clicked!");
-//				}
-//			});
-			elixir.row().padTop(20);
+			rightTopAlignedTable.add(flask).size(70);
+			rightTopAlignedTable.row().padTop(20);
 		}
+
+		elixir.top().right();
+		elixir.add(rightTopAlignedTable).pad(20);
+
 		return elixir;
 	}
 
-	public Array<Image> flasks(){
+	private Table controlBar(){
+		Table controlBarTable = new Table();
+		controlBarTable.setFillParent(true);
+
+		Table leftTopAlignedTable = new Table();
+		leftTopAlignedTable.add(new Image(atlas.findRegion("settings-button"))).size(112);
+		leftTopAlignedTable.row().padTop(20);
+		leftTopAlignedTable.add(new Image(atlas.findRegion("restart-button"))).size(88);
+
+		controlBarTable.top().left();
+		controlBarTable.add(leftTopAlignedTable).pad(20);
+
+		return controlBarTable;
+	}
+
+	private Array<Image> flasks(){
 		Array<Image> flaskArray = new Array<Image>();
-		flaskArray.add(blueFlask);
-		flaskArray.add(redFlask);
+		flaskArray.add(new Image(atlas.findRegion("flask1")));
+		flaskArray.add(new Image(atlas.findRegion("red-flask-md")));
 		return flaskArray;
 	}
 
