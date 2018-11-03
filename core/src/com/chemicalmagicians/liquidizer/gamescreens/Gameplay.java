@@ -87,7 +87,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(20, 0, new Color(0.4f,0.11f,0.25f,1f));
+            fillWithElixir(20, 0,Color.RED);
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
             fillWithElixir(20, 0, Color.GREEN);
@@ -104,7 +104,6 @@ public class Gameplay extends GameScreen implements IGameplay {
                 }
             }
         }
-
 
         checkIntersections();
 
@@ -126,20 +125,28 @@ public class Gameplay extends GameScreen implements IGameplay {
                  elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].x) ||
                 (elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
                  elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].y) ) {
-//                System.out.println(i);
-
                 for(int j=0; j<elixirs.size; j++) {
                     if(i!=j) {
                         if ((elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
                              elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].x) ||
                             (elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
                              elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].y)) {
-                            System.out.println("66666666");
+                            mixElixirs(elixirs.get(i), elixirs.get(j), elixirs.get(i).elixirParticles.first().currentIndex);
                         }
                     }
                 }
 
             }
+        }
+    }
+
+    private boolean isMixing = false;
+    private void mixElixirs(Elixir elixirA, Elixir elixirB, int startIndex) {
+        if (!isMixing) {
+            isMixing = true;
+            System.out.println(elixirGroup.getChildren().items.length);
+            fillWithElixir(elixirA.length, startIndex, Color.YELLOW);
+            elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
         }
     }
 
@@ -177,20 +184,15 @@ public class Gameplay extends GameScreen implements IGameplay {
         isElixirFlowing = true;
     }
 
+    private int p = 0;
+
     public class Elixir {
         public int length = 0;
+        public int elixirPersonalIndex = 0;
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
             this.length = length;
             singleElixir = new Group() {
-                @Override
-                public void act(float delta) {
-                    super.act(delta);
-//                    metaBallShader.dispose();
-//                    metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
-
-                }
-
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
 
@@ -215,9 +217,24 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
 
             elixirGroup.addActor(singleElixir);
-        }
-    }
 
+            this.elixirPersonalIndex = p;
+            p++;
+        }
+
+        public void removeElixir(int index1, int index2) {
+            elixirGroup.removeActor(elixirGroup.getChildren().items[index1]);
+
+            if(index1<index2) {
+                elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
+            } else {
+                elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
+            }
+            elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
+            isMixing = true;
+        }
+
+    }
 
     public class ElixirParticle {
         public int currentIndex;
