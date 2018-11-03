@@ -223,7 +223,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
 
         public void removeElixir(int index1, int index2) {
-            System.out.println(new Vector2(index1, index2));
             elixirGroup.removeActor(elixirGroup.getChildren().items[index1]);
 
             if(index1<index2) {
@@ -232,6 +231,7 @@ public class Gameplay extends GameScreen implements IGameplay {
                 elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
             }
             elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
+            isMixing = true;
         }
 
     }
