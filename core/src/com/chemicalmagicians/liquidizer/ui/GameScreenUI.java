@@ -22,7 +22,7 @@ public class GameScreenUI extends Table {
 
 		for (Image flask:flasks()) {
 			rightTopAlignedTable.add(flask).size(70);
-			rightTopAlignedTable.row().padTop(20);
+			rightTopAlignedTable.row().padTop(10);
 		}
 
 		elixir.top().right();
@@ -42,14 +42,14 @@ public class GameScreenUI extends Table {
 
 		controlBarTable.top().left();
 		controlBarTable.add(leftTopAlignedTable).pad(20);
-
 		return controlBarTable;
 	}
 
 	private Array<Image> flasks(){
 		Array<Image> flaskArray = new Array<Image>();
-		flaskArray.add(new Image(atlas.findRegion("flask1")));
-		flaskArray.add(new Image(atlas.findRegion("red-flask-md")));
+		flaskArray.add(new Image(atlas.findRegion("red")));
+		flaskArray.add(new Image(atlas.findRegion("green")));
+		flaskArray.add(new Image(atlas.findRegion("blue")));
 		return flaskArray;
 	}
 

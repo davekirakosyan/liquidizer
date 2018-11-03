@@ -87,10 +87,10 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(20, 0,Color.RED);
+            fillWithElixir(45, 0,Color.RED);
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
-            fillWithElixir(20, 0, Color.GREEN);
+            fillWithElixir(45, 0, Color.GREEN);
             isPressed = true;
         } else if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
             isPressed = false;
