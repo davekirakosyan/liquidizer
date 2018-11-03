@@ -18,7 +18,7 @@ void main() {
     float top = color.a;
 
     top -= texture2D(u_texture, v_texCoords + vec2(0, -0.015)).a;
-    top = step(0.6, top);
+    top = step(0.7, top);
 
     color.rgb += vec3(top, top, top);
 
@@ -26,5 +26,5 @@ void main() {
 
 	//gl_FragColor.a = smoothstep(0.5, 0.6, color.a);
 
-	gl_FragColor.a = smoothstep(0.4, 0.45, color.a);
+	gl_FragColor.a = smoothstep(0.3, 0.35, color.a);
 }

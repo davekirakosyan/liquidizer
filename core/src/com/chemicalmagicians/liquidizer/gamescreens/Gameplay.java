@@ -74,7 +74,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     public void render() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
-            fillWithElixir(20, 0, Color.RED);
+            fillWithElixir(20, 0, new Color(0.4f,0.11f,0.25f,1f));
             isPressed = true;
         } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
             fillWithElixir(20, 0, Color.GREEN);
@@ -210,7 +210,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-//            this.image.scaleBy((float)Math.random()*0.5f);
+//            this.image.scaleBy((float)Math.random()*0.15f);
             this.currentIndex = currentIndex;
         }
 
