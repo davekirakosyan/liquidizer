@@ -148,10 +148,10 @@ public class Gameplay extends GameScreen implements IGameplay {
         sr.setProjectionMatrix(liquidizer.stage.getViewport().getCamera().combined);
         sr.setAutoShapeType(true);
 
-        controlPoints[0] = new Vector2(300, 300);
-        controlPoints[1] = new Vector2(300, 500);
-        controlPoints[2] = new Vector2(700, 300);
-        controlPoints[3] = new Vector2(700, 500);
+        controlPoints[0] = new Vector2(300, 160);
+        controlPoints[1] = new Vector2(300, 465);
+        controlPoints[2] = new Vector2(900, 160);
+        controlPoints[3] = new Vector2(900, 465);
 
         path = new CatmullRomSpline<Vector2>(controlPoints, true);
 
@@ -225,7 +225,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-            this.image.scaleBy((float)Math.random()*0.15f);
+            this.image.scaleBy((float)Math.random()*0.35f+0.15f);
             this.currentIndex = currentIndex;
         }
 
