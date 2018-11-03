@@ -17,44 +17,65 @@ glass-path
   orig: 874, 424
   offset: 0, 0
   index: -1
-blue
-  rotate: false
-  xy: 1284, 2
-  size: 109, 127
-  orig: 109, 127
-  offset: 0, 0
-  index: -1
 green
   rotate: false
-  xy: 1284, 131
-  size: 109, 126
-  orig: 109, 126
+  xy: 1284, 2
+  size: 88, 119
+  orig: 88, 119
+  offset: 0, 0
+  index: -1
+blue
+  rotate: false
+  xy: 1284, 123
+  size: 88, 119
+  orig: 88, 119
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 1284, 244
+  size: 87, 119
+  orig: 87, 119
   offset: 0, 0
   index: -1
 red
   rotate: false
-  xy: 1284, 259
-  size: 107, 126
-  orig: 107, 126
+  xy: 1284, 365
+  size: 86, 118
+  orig: 86, 118
+  offset: 0, 0
+  index: -1
+orange
+  rotate: false
+  xy: 1284, 485
+  size: 86, 118
+  orig: 86, 118
+  offset: 0, 0
+  index: -1
+purple
+  rotate: false
+  xy: 1374, 2
+  size: 83, 118
+  orig: 83, 118
   offset: 0, 0
   index: -1
 settings-button
   rotate: false
-  xy: 1395, 2
+  xy: 1459, 2
   size: 111, 111
   orig: 111, 111
   offset: 0, 0
   index: -1
 restart-button
   rotate: false
-  xy: 1284, 387
+  xy: 1572, 2
   size: 92, 92
   orig: 92, 92
   offset: 0, 0
   index: -1
 elixir-particle
   rotate: false
-  xy: 1284, 481
+  xy: 1284, 605
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
