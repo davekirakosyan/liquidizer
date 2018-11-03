@@ -15,8 +15,12 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -35,23 +39,23 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] curvePoints = new Vector2[steps];
     private GameScreenUI gameScreenUI;
 
-    private Sprite elixirTexture;
-
     private ShaderProgram metaBallShader;
     private FrameBuffer buffer;
-
-    Array<Elixir> elixirs = new Array<Elixir>();
+    private TextureAtlas atlas;
+    private Sprite elixirTexture;
+    public Array<Elixir> elixirs = new Array<Elixir>();
     private boolean isPressed = false;
     private boolean isElixirFlowing = false;
+    private boolean isMixing = false;
 
     private Group colb;
     public Group singleElixir;
     private Group elixirGroup=new Group();
 
+    Level level1;
+
     // todo: fill intersectPointIndexes array dynamically from data source
     Vector2 intersectPointIndexes[] = new Vector2[] {new Vector2(112, 262)};
-
-    private TextureAtlas atlas;
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
@@ -67,7 +71,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         addActor(colb);
     }
 
-
     @Override
     public void configureForData (LevelData data) { }
 
@@ -81,18 +84,62 @@ public class Gameplay extends GameScreen implements IGameplay {
             System.out.println(metaBallShader.getLog());
         }
 
+        level1 = new Level("No Overlapping", new Color[] {Color.RED, Color.YELLOW}, false, 20);
+
+
         createCurve();
     }
 
+    boolean isJustClicked = false;
     public void render() {
+        getStage().getRoot().setTouchable(Touchable.enabled);
+        getStage().getRoot().addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("I got clicked!");
+            }
+        });
 
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && !isPressed) {
+        Vector3 temp = new Vector3();
+        liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+        Batch batch = liquidizer.stage.getBatch();
+        batch.begin();
+
+        for(int i=0; i<curvePoints.length; i++) {
+            if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
+                temp.y < curvePoints[i].y+50 && temp.y > curvePoints[i].y+40 ) {
+                System.out.println(i);
+                if(Gdx.input.isTouched() && !isJustClicked) {
+                    if(i>=0 && i<=75) {
+                        fillWithElixir(20, 75 - i, Color.RED);
+                    } else if(i>75 && i<=150) {
+                        fillWithElixir(20, 300-(i-75), Color.RED);
+                    } else if(i>150 && i<=225) {
+                        fillWithElixir(20, 375-i, Color.RED);
+                    } else {
+                        fillWithElixir(20, 150-(i-225), Color.RED);
+                    }
+                    isJustClicked = true;
+                } else if(!Gdx.input.isTouched()) {
+                    isJustClicked = false;
+                }
+                batch.draw(elixirTexture, curvePoints[i].x, curvePoints[i].y, 64, 64);
+            }
+        }
+        batch.end();
+
+
+        if(Gdx.input.isKeyPressed(Input.Keys.R) && !isPressed) {
             fillWithElixir(20, 0,Color.RED);
             isPressed = true;
-        } else if(Gdx.input.isKeyPressed(Input.Keys.S) && !isPressed) {
+        } else if(Gdx.input.isKeyPressed(Input.Keys.Y) && !isPressed) {
+            fillWithElixir(20, 0, Color.YELLOW);
+            isPressed = true;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.G) && !isPressed) {
             fillWithElixir(20, 0, Color.GREEN);
             isPressed = true;
-        } else if(!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if(!Gdx.input.isKeyPressed(Input.Keys.R) && !Gdx.input.isKeyPressed(Input.Keys.Y) && !Gdx.input.isKeyPressed(Input.Keys.G)) {
             isPressed = false;
         }
 
@@ -106,7 +153,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
 
         checkIntersections();
-
 
         //converting from touch to stage coordinates    -- todo: don't delete the comments below
 //        Batch batch = liquidizer.stage.getBatch();
@@ -140,13 +186,21 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
     }
 
-    private boolean isMixing = false;
     private void mixElixirs(Elixir elixirA, Elixir elixirB, int startIndex) {
+
         if (!isMixing) {
-            isMixing = true;
-            System.out.println(elixirGroup.getChildren().items.length);
-            fillWithElixir(elixirA.length, startIndex, Color.YELLOW);
-            elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+            if( (elixirA.color == Color.RED && elixirB.color == Color.YELLOW) ||
+                (elixirB.color == Color.RED && elixirA.color == Color.YELLOW) ) {
+                fillWithElixir(elixirA.length, startIndex, Color.ORANGE);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            } else if( (elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) ||
+                (elixirB.color == Color.GREEN && elixirA.color == Color.YELLOW) ) {
+                fillWithElixir(elixirA.length, startIndex, Color.CYAN);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            }
+
         }
     }
 
@@ -189,8 +243,10 @@ public class Gameplay extends GameScreen implements IGameplay {
     public class Elixir {
         public int length = 0;
         public int elixirPersonalIndex = 0;
+        public Color color;
         Array<ElixirParticle> elixirParticles = new Array<ElixirParticle>();
         public Elixir(int length, int startIndex, Color color) {
+            this.color = color;
             this.length = length;
             singleElixir = new Group() {
                 @Override
@@ -212,6 +268,10 @@ public class Gameplay extends GameScreen implements IGameplay {
             };
             for (int i=0; i<length; i++) {
                 elixirParticles.add(new ElixirParticle(startIndex+i, elixirTexture, color));
+                if(startIndex+i>=300) {
+                    startIndex -= 300-i;
+                }
+//                else if()
                 elixirParticles.get(i).image.setPosition(curvePoints[startIndex+i].x, curvePoints[startIndex+i].y);
                 singleElixir.addActor(elixirParticles.get(i).image);
             }
@@ -226,12 +286,12 @@ public class Gameplay extends GameScreen implements IGameplay {
             elixirGroup.removeActor(elixirGroup.getChildren().items[index1]);
 
             if(index1<index2) {
-                elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
+                 elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
             } else {
                 elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
             }
             elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
-            isMixing = true;
+//            isMixing = false;
         }
 
     }
@@ -255,6 +315,17 @@ public class Gameplay extends GameScreen implements IGameplay {
                 image.setPosition(curvePoints[currentIndex].x, curvePoints[currentIndex].y);
                 currentIndex++;
             }
+        }
+    }
+
+    private class Level {
+        public String goal;
+        public Color[] elixirColors;
+        public boolean areMixing = false;
+        public int amountOfElixirs = 0;
+
+        public Level(String goal, Color[] elixirColors, boolean areMixing, int amountOfElixirs) {
+
         }
     }
 }
