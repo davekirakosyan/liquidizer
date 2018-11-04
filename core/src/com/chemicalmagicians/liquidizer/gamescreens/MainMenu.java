@@ -11,13 +11,13 @@ import com.chemicalmagicians.liquidizer.interfaces.IMainMenu;
 import com.chemicalmagicians.liquidizer.ui.MainMenuUI;
 
 public class MainMenu extends GameScreen implements IMainMenu {
-    private MainMenuUI mainMenuUI;
+    public MainMenuUI mainMenuUI;
     private TextureAtlas atlas;
 
     public MainMenu (Liquidizer liquidizer) {
         super(liquidizer);
         atlas=new TextureAtlas(Gdx.files.internal("atlas.pack"));
-        mainMenuUI=new MainMenuUI();
+        mainMenuUI=new MainMenuUI(liquidizer);
         setBackground(new TextureRegionDrawable(atlas.findRegion("backgraund-game-start-menu")));
         add(mainMenuUI).grow();
     }

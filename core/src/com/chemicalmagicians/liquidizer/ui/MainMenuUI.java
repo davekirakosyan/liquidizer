@@ -10,14 +10,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
 
 public class MainMenuUI extends Table {
 
 	private TextureAtlas atlas;
+	public Gameplay gameplay;
+	Liquidizer liquidizer;
 
-	public MainMenuUI(){
+	public MainMenuUI(Liquidizer liquidizer){
+		this.liquidizer = liquidizer;
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
 		addActor(leftSideTable());
 		addActor(rightSideTable());
@@ -53,7 +57,10 @@ public class MainMenuUI extends Table {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-//				System.out.println("click");
+				gameplay = new Gameplay(liquidizer);
+				gameplay.start();
+				getStage().addActor(gameplay);
+				liquidizer.isGameOn = true;
 			}
 		});
 		paperTable.add(playButton);

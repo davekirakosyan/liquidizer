@@ -28,7 +28,7 @@ public class Liquidizer extends ApplicationAdapter {
 
 	private MainMenu mainMenu;
 	private LevelSelection levelSelection;
-	private Gameplay gameplay;
+	public Gameplay gameplay;
 
 	@Override
 	public void create () {
@@ -41,26 +41,31 @@ public class Liquidizer extends ApplicationAdapter {
 
 
 		mainMenu = new MainMenu(this);
+		mainMenu.start();
+		stage.addActor(mainMenu);
 		levelSelection = new LevelSelection(this);
 
 		gameController = new GameController(this);
 
-		gameplay = new Gameplay(this);
-		gameplay.start();
-		stage.addActor(gameplay);
+//		gameplay = new Gameplay(this);
+//		gameplay.start();
+//		stage.addActor(gameplay);
 
 	}
 
+	public boolean isGameOn = false;
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//		gameplay.render();
+		if(isGameOn)
+			mainMenu.mainMenuUI.gameplay.render();
 
 		stage.act();
 		stage.draw();
 	}
+
 
 	@Override
 	public void resize (int width, int height) {
