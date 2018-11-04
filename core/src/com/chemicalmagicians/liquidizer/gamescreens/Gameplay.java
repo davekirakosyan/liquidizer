@@ -57,8 +57,6 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public static Color currentUsingColor = new Color();
 
-    public static boolean startLvl2 = false;
-
     Level currentLevel;
     Level level1;
     Level level2;
@@ -76,6 +74,8 @@ public class Gameplay extends GameScreen implements IGameplay {
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         level1 = new Level(1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 30);
         currentLevel = level1;
+//        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+//        currentLevel = level2;
 
         colb=new Group();
         glassPath.setOrigin(Align.center);
@@ -162,10 +162,6 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        batch.end();
 
 
-        if(startLvl2) {
-            resetElixirs();
-            startLvl2 = false;
-        }
     }
 
     private void checkIntersections() {
@@ -361,12 +357,24 @@ public class Gameplay extends GameScreen implements IGameplay {
             this.areMixing = areMixing;
             currentLvlElixirColors = elixirColors;
         }
+
+        private boolean anotherShittyBool = true;
+        private boolean hasTheRightMix = false;
         public void onMixing(Color outcomeColor) {
             if(!areMixing) {
-                System.out.println("go fuck yourself");
+                if(anotherShittyBool) {
+                    System.out.println("loser");
+                    WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                    winLoseUI.failTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                    winLoseUI.setPosition(500,500);
+                    addActor(winLoseUI.failTable());
+                    anotherShittyBool = false;
+                }
             } else {
-                if(outcomeColor == idealOutcome) {
-                    System.out.println("don't fuck yourself");
+                if(lvl==2) {
+                    if (outcomeColor == idealOutcome) {
+                       hasTheRightMix = true;
+                    }
                 }
             }
         }
@@ -381,17 +389,28 @@ public class Gameplay extends GameScreen implements IGameplay {
                 }
                 if(finishCheck)
                     deltaTime+=Gdx.graphics.getDeltaTime();
-                if(deltaTime>=4 && !lvl2Check )
-                    levelUp2();
+                if(deltaTime>=4 && !lvl2Check ) {
+//                    levelUp2();
+                    WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                    winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                    winLoseUI.setPosition(500,500);
+//                    winLoseUI.addAction();
+                    addActor(winLoseUI.winTable());
+                }
+            }
+
+            if(lvl==2 && hasTheRightMix && usedElixirs.contains(Color.GREEN, true)) {
+                System.out.println("workkkk bitch");
             }
         }
         public void levelUp2() {
             lvl2Check = true;
-            System.out.println("qaq");
+            System.out.println("lvl2");
             resetElixirs();
         }
 
     }
+
     public void resetElixirs() {
 //        for (int i=0; i<elixirs.size; i++) {
 //            elixirs.get(0).remove(0);
@@ -399,7 +418,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        deltaTime = 0;
 //         isElixirFlowing = false;
 //        Liquidizer.lvl2();
-        this.remove();
+//        this.remove();
 //        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
 //        currentLevel = level2;
     }

@@ -44,8 +44,8 @@ public class Liquidizer extends ApplicationAdapter {
 		winLoseUI=new WinLoseUI(this);
 		stage.addActor(winLoseUI.failTable());
 		mainMenu = new MainMenu(this);
-//		mainMenu.start();
-//		stage.addActor(mainMenu);
+		mainMenu.start();
+		stage.addActor(mainMenu);
 		levelSelection = new LevelSelection(this);
 
 		gameController = new GameController(this);

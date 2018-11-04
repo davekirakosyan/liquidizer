@@ -123,7 +123,7 @@ public class GameScreenUI extends Table {
 		resterBtn.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.startLvl2 = true;
+//				Gameplay.startLvl2 = true;
 			}
 		});
 		leftTopAlignedTable.add(resterBtn).size(88);
