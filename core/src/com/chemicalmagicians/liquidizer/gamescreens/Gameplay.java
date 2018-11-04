@@ -72,10 +72,10 @@ public class Gameplay extends GameScreen implements IGameplay {
         atlas=new TextureAtlas(Gdx.files.internal("atlas.pack"));
         Image glassPath = new Image(atlas.findRegion("glass-path"));
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        level1 = new Level(1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 30);
-        currentLevel = level1;
-//        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
-//        currentLevel = level2;
+//        level1 = new Level(1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
+//        currentLevel = level1;
+        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+        currentLevel = level2;
 
         colb=new Group();
         glassPath.setOrigin(Align.center);
@@ -114,10 +114,10 @@ public class Gameplay extends GameScreen implements IGameplay {
         batch.begin();
 
         for(int i=0; i<curvePoints.length; i++) {
-            if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
-                temp.y < curvePoints[i].y+100 && temp.y > curvePoints[i].y+70 ) {
+            if (temp.x < curvePoints[i].x+60 && temp.x > curvePoints[i].x  &&
+                    temp.y < curvePoints[i].y+60 && temp.y > curvePoints[i].y-10 ) {
                 if(Gdx.input.isTouched() && !isJustClicked) {
-                        fillWithElixir(currentLevel.amountOfElixirs, i, currentUsingColor);
+                    fillWithElixir(currentLevel.amountOfElixirs, i, currentUsingColor);
                     isJustClicked = true;
                 } else if(!Gdx.input.isTouched()) {
                     isJustClicked = false;
@@ -151,6 +151,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
 
         checkIntersections();
+        checkCollision();
 
         //converting from touch to stage coordinates    -- todo: don't delete the comments below
 //        Batch batch = liquidizer.stage.getBatch();
@@ -167,15 +168,15 @@ public class Gameplay extends GameScreen implements IGameplay {
     private void checkIntersections() {
         for(int i=0; i<elixirs.size; i++) {
             if ((elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
-                 elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].x) ||
-                (elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
-                 elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].y) ) {
+                    elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].x) ||
+                    (elixirs.get(i).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
+                            elixirs.get(i).elixirParticles.first().currentIndex+elixirs.get(i).length > intersectPointIndexes[0].y) ) {
                 for(int j=0; j<elixirs.size; j++) {
                     if(i!=j) {
                         if ((elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].x &&
-                             elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].x) ||
-                            (elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
-                             elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].y)) {
+                                elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].x) ||
+                                (elixirs.get(j).elixirParticles.first().currentIndex < intersectPointIndexes[0].y &&
+                                        elixirs.get(j).elixirParticles.first().currentIndex + elixirs.get(i).length > intersectPointIndexes[0].y)) {
                             mixElixirs(elixirs.get(i), elixirs.get(j), elixirs.get(i).elixirParticles.first().currentIndex);
                         }
                     }
@@ -185,25 +186,50 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
     }
 
-	private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
+    private void checkCollision() {
+        for (int i=0; i<elixirs.size; i++) {
+            for (int j=0; j<elixirs.size; j++) {
+                if(i!=j) {
+                    Elixir elixirA = elixirs.get(i);
+                    Elixir elixirB = elixirs.get(j);
+                    if ((elixirA.elixirParticles.first().currentIndex <= elixirB.elixirParticles.first().currentIndex + elixirB.length &&
+                            elixirA.elixirParticles.first().currentIndex >= elixirB.elixirParticles.first().currentIndex ) ||
+                            (elixirA.elixirParticles.first().currentIndex+elixirA.length <= elixirB.elixirParticles.first().currentIndex + elixirB.length &&
+                                    elixirA.elixirParticles.first().currentIndex+elixirA.length >= elixirB.elixirParticles.first().currentIndex ) ) {
+                        mixElixirs(elixirA, elixirB, elixirA.elixirParticles.first().currentIndex);
+//                        System.out.println("wooooorrrrrrkiiiiiing");
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
 
         Color outcomeColor = new Color();
 
-		if (!isMixing) {
-			if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
-				&& elixirA.color == Color.YELLOW)) {
-			    outcomeColor = Color.ORANGE;
-				fillWithElixir(elixirA.length, startIndex, outcomeColor);
-				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-				isMixing = true;
-			} else if ((elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) || (elixirB.color == Color.GREEN
-				&& elixirA.color == Color.YELLOW)) {
+        if (!isMixing) {
+            if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
+                    && elixirA.color == Color.YELLOW)) {
+                outcomeColor = Color.ORANGE;
+                fillWithElixir(elixirA.length, startIndex, outcomeColor);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            } else if ((elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) || (elixirB.color == Color.GREEN
+                    && elixirA.color == Color.YELLOW)) {
                 outcomeColor = Color.CYAN;
-				fillWithElixir(elixirA.length, startIndex, outcomeColor);
-				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-				isMixing = true;
-			}else if ((elixirA.color == Color.RED && elixirB.color == Color.BLUE) || (elixirB.color == Color.RED
-                && elixirA.color == Color.BLUE )) {
+                fillWithElixir(elixirA.length, startIndex, outcomeColor);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            } else if ((elixirA.color == Color.RED && elixirB.color == Color.BLUE) || (elixirB.color == Color.RED
+                    && elixirA.color == Color.BLUE )) {
+                outcomeColor = Color.PURPLE;
+                fillWithElixir(elixirA.length, startIndex, outcomeColor);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            } else if(elixirA.color == elixirB.color) {
                 outcomeColor = Color.PURPLE;
                 fillWithElixir(elixirA.length, startIndex, outcomeColor);
                 elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
@@ -212,8 +238,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 
             currentLevel.onMixing(outcomeColor);
 
-		}
-	}
+        }
+    }
 
     private void createCurve() {
         sr = new ShapeRenderer();
@@ -300,7 +326,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             elixirGroup.removeActor(elixirGroup.getChildren().items[index1]);
 
             if(index1<index2) {
-                 elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
+                elixirGroup.removeActor(elixirGroup.getChildren().items[index2-1]);
             } else {
                 elixirGroup.removeActor(elixirGroup.getChildren().items[index2]);
             }
@@ -373,12 +399,18 @@ public class Gameplay extends GameScreen implements IGameplay {
             } else {
                 if(lvl==2) {
                     if (outcomeColor == idealOutcome) {
-                       hasTheRightMix = true;
+                        hasTheRightMix = true;
+                    } else {
+                        WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                        winLoseUI.failTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                        winLoseUI.setPosition(500,500);
+                        addActor(winLoseUI.failTable());
                     }
                 }
             }
         }
         private boolean lvl2Check = false;
+        private boolean checkForWinL2 = false;
         public void update() {
             if(!areMixing) {
                 finishCheck = true;
@@ -394,13 +426,16 @@ public class Gameplay extends GameScreen implements IGameplay {
                     WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
                     winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
                     winLoseUI.setPosition(500,500);
-//                    winLoseUI.addAction();
                     addActor(winLoseUI.winTable());
                 }
             }
 
-            if(lvl==2 && hasTheRightMix && usedElixirs.contains(Color.GREEN, true)) {
-                System.out.println("workkkk bitch");
+            if(lvl==2 && hasTheRightMix && usedElixirs.contains(Color.GREEN, true) && !checkForWinL2) {
+                WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                winLoseUI.setPosition(500,500);
+                addActor(winLoseUI.winTable());
+                checkForWinL2 = true;
             }
         }
         public void levelUp2() {
