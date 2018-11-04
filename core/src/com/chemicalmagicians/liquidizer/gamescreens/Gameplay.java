@@ -57,6 +57,8 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public static Color currentUsingColor = new Color();
 
+    public static boolean startLvl2 = false;
+
     Level currentLevel;
     Level level1;
     Level level2;
@@ -73,7 +75,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         Image glassPath = new Image(atlas.findRegion("glass-path"));
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         level1 = new Level(1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 30);
-//        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
         currentLevel = level1;
 
         colb=new Group();
@@ -160,6 +161,11 @@ public class Gameplay extends GameScreen implements IGameplay {
 //        batch.draw(elixirTexture, temp.x, temp.y, 64, 64);
 //        batch.end();
 
+
+        if(startLvl2) {
+            resetElixirs();
+            startLvl2 = false;
+        }
     }
 
     private void checkIntersections() {
@@ -306,6 +312,10 @@ public class Gameplay extends GameScreen implements IGameplay {
 //            isMixing = false;
         }
 
+        public void remove(int i) {
+            elixirGroup.removeActor(elixirGroup.getChildren().items[i]);
+        }
+
     }
 
     public class ElixirParticle {
@@ -329,6 +339,8 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
         }
     }
+    private float deltaTime = 0;
+    private boolean finishCheck = false;
 
     private class Level {
         public int lvl;
@@ -340,7 +352,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         public Color[] elixirColors;
         public Array<Color> usedElixirs = new Array<Color>();
 
-        private float deltaTime = 0;
 
         public Level(int lvl, String goal, Color[] elixirColors, Color idealOutcome, boolean areMixing, int amountOfElixirs) {
             this.amountOfElixirs = amountOfElixirs;
@@ -359,7 +370,7 @@ public class Gameplay extends GameScreen implements IGameplay {
                 }
             }
         }
-        private boolean finishCheck = false;
+        private boolean lvl2Check = false;
         public void update() {
             if(!areMixing) {
                 finishCheck = true;
@@ -370,9 +381,26 @@ public class Gameplay extends GameScreen implements IGameplay {
                 }
                 if(finishCheck)
                     deltaTime+=Gdx.graphics.getDeltaTime();
-                if(deltaTime>=6)
-                    System.out.println("Level "+lvl+" passed");
+                if(deltaTime>=4 && !lvl2Check )
+                    levelUp2();
             }
         }
+        public void levelUp2() {
+            lvl2Check = true;
+            System.out.println("qaq");
+            resetElixirs();
+        }
+
+    }
+    public void resetElixirs() {
+//        for (int i=0; i<elixirs.size; i++) {
+//            elixirs.get(0).remove(0);
+//        }
+//        deltaTime = 0;
+//         isElixirFlowing = false;
+//        Liquidizer.lvl2();
+        this.remove();
+//        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+//        currentLevel = level2;
     }
 }
