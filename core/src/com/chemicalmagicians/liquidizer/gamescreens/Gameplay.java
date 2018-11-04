@@ -40,6 +40,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private Vector2[] controlPoints = new Vector2[4];
     private Vector2[] curvePoints = new Vector2[steps];
     private GameScreenUI gameScreenUI;
+    private MainMenuUI mainMenuUI;
 
     private ShaderProgram metaBallShader;
     private FrameBuffer buffer;
@@ -71,6 +72,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         glassPath.setPosition(200,120);
         colb.addActor(glassPath);
         gameScreenUI = new GameScreenUI();
+//        mainMenuUI =new MainMenuUI();
         addActor(elixirGroup);
         addActor(colb);
 
@@ -97,6 +99,14 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private boolean isJustClicked = false;
     public void render() {
+        getStage().getRoot().setTouchable(Touchable.enabled);
+        getStage().getRoot().addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+//                System.out.println("I got clicked!");
+            }
+        });
+
         Vector3 temp = new Vector3();
         liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
@@ -107,7 +117,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
                 temp.y < curvePoints[i].y+100 && temp.y > curvePoints[i].y+70 ) {
                 if(Gdx.input.isTouched() && !isJustClicked) {
-                        fillWithElixir(20, i, Color.RED);
+                        fillWithElixir(45, i, currentUsingColor);
                     isJustClicked = true;
                 } else if(!Gdx.input.isTouched()) {
                     isJustClicked = false;
@@ -187,7 +197,12 @@ public class Gameplay extends GameScreen implements IGameplay {
 				fillWithElixir(elixirA.length, startIndex, Color.CYAN);
 				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
 				isMixing = true;
-			}
+			}else if ((elixirA.color == Color.RED && elixirB.color == Color.BLUE) || (elixirB.color == Color.RED
+                && elixirA.color == Color.BLUE )) {
+                fillWithElixir(elixirA.length, startIndex, Color.PURPLE);
+                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
+                isMixing = true;
+            }
 
 		}
 	}
@@ -218,7 +233,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         sr.end();
         setFillParent(true);
         add(gameScreenUI).grow();
-
+//        add(mainMenuUI).grow();
     }
 
     private void fillWithElixir(int length, int startIndex, Color color) {

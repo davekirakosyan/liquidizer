@@ -10,72 +10,100 @@ background
   orig: 1280, 720
   offset: 0, 0
   index: -1
-glass-path
+backgraund-game-start-menu
   rotate: false
   xy: 2, 724
+  size: 1280, 720
+  orig: 1280, 720
+  offset: 0, 0
+  index: -1
+glass-path
+  rotate: false
+  xy: 2, 1446
   size: 874, 424
   orig: 874, 424
   offset: 0, 0
   index: -1
-green
+character
   rotate: false
   xy: 1284, 2
-  size: 88, 119
-  orig: 88, 119
+  size: 463, 511
+  orig: 463, 511
   offset: 0, 0
   index: -1
-blue
+board-left
   rotate: false
-  xy: 1284, 123
-  size: 88, 119
-  orig: 88, 119
+  xy: 878, 1446
+  size: 403, 516
+  orig: 403, 516
   offset: 0, 0
   index: -1
-yellow
+paper
   rotate: false
-  xy: 1284, 244
-  size: 87, 119
-  orig: 87, 119
-  offset: 0, 0
-  index: -1
-red
-  rotate: false
-  xy: 1284, 365
-  size: 86, 118
-  orig: 86, 118
-  offset: 0, 0
-  index: -1
-orange
-  rotate: false
-  xy: 1284, 485
-  size: 86, 118
-  orig: 86, 118
-  offset: 0, 0
-  index: -1
-purple
-  rotate: false
-  xy: 1374, 2
-  size: 83, 118
-  orig: 83, 118
+  xy: 1284, 724
+  size: 346, 423
+  orig: 346, 423
   offset: 0, 0
   index: -1
 settings-button
   rotate: false
-  xy: 1459, 2
+  xy: 1284, 515
   size: 111, 111
   orig: 111, 111
   offset: 0, 0
   index: -1
 restart-button
   rotate: false
-  xy: 1572, 2
+  xy: 1284, 628
   size: 92, 92
   orig: 92, 92
   offset: 0, 0
   index: -1
+green
+  rotate: false
+  xy: 1397, 515
+  size: 88, 119
+  orig: 88, 119
+  offset: 0, 0
+  index: -1
+blue
+  rotate: false
+  xy: 1487, 515
+  size: 88, 119
+  orig: 88, 119
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 1577, 515
+  size: 87, 119
+  orig: 87, 119
+  offset: 0, 0
+  index: -1
+red
+  rotate: false
+  xy: 1749, 2
+  size: 86, 118
+  orig: 86, 118
+  offset: 0, 0
+  index: -1
+orange
+  rotate: false
+  xy: 1837, 2
+  size: 86, 118
+  orig: 86, 118
+  offset: 0, 0
+  index: -1
+purple
+  rotate: false
+  xy: 1925, 2
+  size: 83, 118
+  orig: 83, 118
+  offset: 0, 0
+  index: -1
 elixir-particle
   rotate: false
-  xy: 1284, 605
+  xy: 1397, 636
   size: 45, 45
   orig: 45, 45
   offset: 0, 0
