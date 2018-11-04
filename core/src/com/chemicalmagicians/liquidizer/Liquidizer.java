@@ -36,7 +36,7 @@ public class Liquidizer extends ApplicationAdapter {
 		batch = new PolygonSpriteBatch();
 		ExtendViewport extendViewport = new ExtendViewport(1280,720, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
-		Gdx.input.setInputProcessor(stage);	// todo: KAREVOR TOX
+		Gdx.input.setInputProcessor(stage);	// todo:  KAREVOR TOX
 		//Load and init
 
 		//load
@@ -44,10 +44,10 @@ public class Liquidizer extends ApplicationAdapter {
 		//init
 		mainMenu = new MainMenu(this);
 		levelSelection = new LevelSelection(this);
-		gameplay = new Gameplay(this);
 
 		gameController = new GameController(this);
 
+		gameplay = new Gameplay(this);
 		gameplay.start();
 		stage.addActor(gameplay);
 

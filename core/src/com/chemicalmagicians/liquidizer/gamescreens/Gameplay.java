@@ -57,16 +57,25 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     public static Color currentUsingColor = new Color();
 
+    Level currentLevel;
     Level level1;
+    Level level2;
 
     // todo: fill intersectPointIndexes array dynamically from data source
     Vector2 intersectPointIndexes[] = new Vector2[] {new Vector2(112, 262)};
+
+    public static Color[] currentLvlElixirColors;
+
 
     public Gameplay (Liquidizer liquidizer) {
         super(liquidizer);
         atlas=new TextureAtlas(Gdx.files.internal("atlas.pack"));
         Image glassPath = new Image(atlas.findRegion("glass-path"));
         buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        level1 = new Level(1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 30);
+//        level2 = new Level(2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+        currentLevel = level1;
+
         colb=new Group();
         glassPath.setOrigin(Align.center);
         glassPath.setPosition(200,120);
@@ -77,7 +86,6 @@ public class Gameplay extends GameScreen implements IGameplay {
         addActor(colb);
 
         setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
-
     }
 
     @Override
@@ -90,8 +98,6 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
 
-        level1 = new Level("No Overlapping", new Color[] {Color.RED, Color.YELLOW}, false, 20);
-
         currentUsingColor = Color.GOLD;
 
         createCurve();
@@ -99,16 +105,10 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private boolean isJustClicked = false;
     public void render() {
-        getStage().getRoot().setTouchable(Touchable.enabled);
-        getStage().getRoot().addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-//                System.out.println("I got clicked!");
-            }
-        });
-
         Vector3 temp = new Vector3();
         liquidizer.stage.getCamera().unproject(temp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+        currentLevel.update();
 
         Batch batch = liquidizer.stage.getBatch();
         batch.begin();
@@ -117,7 +117,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             if (temp.x < curvePoints[i].x+30 && temp.x > curvePoints[i].x-30  &&
                 temp.y < curvePoints[i].y+100 && temp.y > curvePoints[i].y+70 ) {
                 if(Gdx.input.isTouched() && !isJustClicked) {
-                        fillWithElixir(45, i, currentUsingColor);
+                        fillWithElixir(currentLevel.amountOfElixirs, i, currentUsingColor);
                     isJustClicked = true;
                 } else if(!Gdx.input.isTouched()) {
                     isJustClicked = false;
@@ -186,23 +186,30 @@ public class Gameplay extends GameScreen implements IGameplay {
 
 	private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
 
+        Color outcomeColor = new Color();
+
 		if (!isMixing) {
 			if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
 				&& elixirA.color == Color.YELLOW)) {
-				fillWithElixir(elixirA.length, startIndex, Color.ORANGE);
+			    outcomeColor = Color.ORANGE;
+				fillWithElixir(elixirA.length, startIndex, outcomeColor);
 				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
 				isMixing = true;
 			} else if ((elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) || (elixirB.color == Color.GREEN
 				&& elixirA.color == Color.YELLOW)) {
-				fillWithElixir(elixirA.length, startIndex, Color.CYAN);
+                outcomeColor = Color.CYAN;
+				fillWithElixir(elixirA.length, startIndex, outcomeColor);
 				elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
 				isMixing = true;
 			}else if ((elixirA.color == Color.RED && elixirB.color == Color.BLUE) || (elixirB.color == Color.RED
                 && elixirA.color == Color.BLUE )) {
-                fillWithElixir(elixirA.length, startIndex, Color.PURPLE);
+                outcomeColor = Color.PURPLE;
+                fillWithElixir(elixirA.length, startIndex, outcomeColor);
                 elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
                 isMixing = true;
             }
+
+            currentLevel.onMixing(outcomeColor);
 
 		}
 	}
@@ -251,6 +258,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         public Elixir(int length, int startIndex, Color color) {
             this.color = color;
             this.length = length;
+            currentLevel.usedElixirs.add(color);
             singleElixir = new Group() {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
@@ -325,13 +333,48 @@ public class Gameplay extends GameScreen implements IGameplay {
     }
 
     private class Level {
+        public int lvl;
         public String goal;
-        public Color[] elixirColors;
         public boolean areMixing = false;
         public int amountOfElixirs = 0;
+        Color idealOutcome;
 
-        public Level(String goal, Color[] elixirColors, boolean areMixing, int amountOfElixirs) {
+        public Color[] elixirColors;
+        public Array<Color> usedElixirs = new Array<Color>();
 
+        private float deltaTime = 0;
+
+        public Level(int lvl, String goal, Color[] elixirColors, Color idealOutcome, boolean areMixing, int amountOfElixirs) {
+            this.amountOfElixirs = amountOfElixirs;
+            this.elixirColors = elixirColors;
+            this.idealOutcome = idealOutcome;
+            this.lvl = lvl;
+            this.areMixing = areMixing;
+            currentLvlElixirColors = elixirColors;
+        }
+        public void onMixing(Color outcomeColor) {
+            if(!areMixing) {
+                System.out.println("go fuck yourself");
+            } else {
+                if(outcomeColor == idealOutcome) {
+                    System.out.println("don't fuck yourself");
+                }
+            }
+        }
+        private boolean finishCheck = false;
+        public void update() {
+            if(!areMixing) {
+                finishCheck = true;
+                for (int i=0; i<elixirColors.length; i++) {
+                    if (!usedElixirs.contains(elixirColors[i], true)) {
+                        finishCheck = false;
+                    }
+                }
+                if(finishCheck)
+                    deltaTime+=Gdx.graphics.getDeltaTime();
+                if(deltaTime>=6)
+                    System.out.println("Level "+lvl+" passed");
+            }
         }
     }
 }

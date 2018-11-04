@@ -34,74 +34,76 @@ public class GameScreenUI extends Table {
 		rightTopAlignedTable.setTouchable(Touchable.enabled);
 
 
+		for(int i=0; i<Gameplay.currentLvlElixirColors.length; i++) {
+			if (Gameplay.currentLvlElixirColors[i]==Color.RED) {
+				Image redFlask=flasks().get(0);
+				rightTopAlignedTable.add(redFlask);
+				redFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.RED;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
 
-		Image redFlask=flasks().get(0);
-		rightTopAlignedTable.add(redFlask);
-		redFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.RED;
+				redFlask.scaleBy(-0.2f);
+			} else if(Gameplay.currentLvlElixirColors[i]==Color.GREEN) {
+				Image greenFlask=flasks().get(1);
+				rightTopAlignedTable.add(greenFlask);
+				greenFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.GREEN;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
+				greenFlask.scaleBy(-0.2f);
+			} else if(Gameplay.currentLvlElixirColors[i]==Color.BLUE) {
+				Image blueFlask=flasks().get(2);
+				rightTopAlignedTable.add(blueFlask);
+				blueFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.BLUE;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
+				blueFlask.scaleBy(-0.2f);
+			} else if(Gameplay.currentLvlElixirColors[i]==Color.YELLOW) {
+				Image yellowFlask=flasks().get(3);
+				rightTopAlignedTable.add(yellowFlask);
+				yellowFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.YELLOW;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
+				yellowFlask.scaleBy(-0.2f);
+			} else if(Gameplay.currentLvlElixirColors[i]==Color.PURPLE) {
+				Image purpleFlask=flasks().get(4);
+				rightTopAlignedTable.add(purpleFlask);
+				purpleFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.PURPLE;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
+				purpleFlask.scaleBy(-0.2f);
+			} else if(Gameplay.currentLvlElixirColors[i]==Color.ORANGE) {
+				Image orangeFlask=flasks().get(5);
+				rightTopAlignedTable.add(orangeFlask);
+				orangeFlask.addListener(new ClickListener(){
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gameplay.currentUsingColor = Color.ORANGE;
+					}
+				});
+				rightTopAlignedTable.row().padTop(-10);
+				orangeFlask.scaleBy(-0.2f);
 			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		Image greenFlask=flasks().get(1);
-		rightTopAlignedTable.add(greenFlask);
-		greenFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.GREEN;
-			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		Image blueFlask=flasks().get(2);
-		rightTopAlignedTable.add(blueFlask);
-		blueFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.BLUE;
-			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		Image yellowFlask=flasks().get(3);
-		rightTopAlignedTable.add(yellowFlask);
-		yellowFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.YELLOW;
-			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		Image purpleFlask=flasks().get(4);
-		rightTopAlignedTable.add(purpleFlask);
-		purpleFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.PURPLE;
-			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		Image orangeFlask=flasks().get(5);
-		rightTopAlignedTable.add(orangeFlask);
-		orangeFlask.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gameplay.currentUsingColor = Color.ORANGE;
-			}
-		});
-		rightTopAlignedTable.row().padTop(-10);
-
-		redFlask.scaleBy(-0.2f);
-		greenFlask.scaleBy(-0.2f);
-		blueFlask.scaleBy(-0.2f);
-		purpleFlask.scaleBy(-0.2f);
-		yellowFlask.scaleBy(-0.2f);
-		orangeFlask.scaleBy(-0.2f);
-
+		}
 
 		elixir.top().right();
 		elixir.add(rightTopAlignedTable);
