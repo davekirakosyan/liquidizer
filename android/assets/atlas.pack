@@ -45,65 +45,72 @@ paper
   orig: 346, 423
   offset: 0, 0
   index: -1
-settings-button
+play-btn
   rotate: false
   xy: 1284, 515
+  size: 197, 79
+  orig: 197, 79
+  offset: 0, 0
+  index: -1
+settings-button
+  rotate: false
+  xy: 1284, 596
   size: 111, 111
   orig: 111, 111
   offset: 0, 0
   index: -1
 restart-button
   rotate: false
-  xy: 1284, 628
+  xy: 1483, 515
   size: 92, 92
   orig: 92, 92
   offset: 0, 0
   index: -1
 green
   rotate: false
-  xy: 1397, 515
+  xy: 1577, 515
   size: 88, 119
   orig: 88, 119
   offset: 0, 0
   index: -1
 blue
   rotate: false
-  xy: 1487, 515
+  xy: 1749, 2
   size: 88, 119
   orig: 88, 119
   offset: 0, 0
   index: -1
 yellow
   rotate: false
-  xy: 1577, 515
+  xy: 1839, 2
   size: 87, 119
   orig: 87, 119
   offset: 0, 0
   index: -1
 red
   rotate: false
-  xy: 1749, 2
+  xy: 1928, 2
   size: 86, 118
   orig: 86, 118
   offset: 0, 0
   index: -1
 orange
   rotate: false
-  xy: 1837, 2
+  xy: 1749, 123
   size: 86, 118
   orig: 86, 118
   offset: 0, 0
   index: -1
 purple
   rotate: false
-  xy: 1925, 2
+  xy: 1397, 596
   size: 83, 118
   orig: 83, 118
   offset: 0, 0
   index: -1
 elixir-particle
   rotate: false
-  xy: 1397, 636
+  xy: 1483, 609
   size: 45, 45
   orig: 45, 45
   offset: 0, 0

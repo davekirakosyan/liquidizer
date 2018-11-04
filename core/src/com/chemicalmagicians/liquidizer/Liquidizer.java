@@ -37,19 +37,20 @@ public class Liquidizer extends ApplicationAdapter {
 		ExtendViewport extendViewport = new ExtendViewport(1280,720, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
 		Gdx.input.setInputProcessor(stage);	// todo: KAREVOR TOX
-		//Load and init
 
-		//load
 
-		//init
+
 		mainMenu = new MainMenu(this);
 		levelSelection = new LevelSelection(this);
 		gameplay = new Gameplay(this);
 
 		gameController = new GameController(this);
 
-		gameplay.start();
-		stage.addActor(gameplay);
+		mainMenu.start();
+		stage.addActor(mainMenu);
+
+//		gameplay.start();
+//		stage.addActor(gameplay);
 
 	}
 
@@ -58,7 +59,7 @@ public class Liquidizer extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		gameplay.render();
+//		gameplay.render();
 
 		stage.act();
 		stage.draw();

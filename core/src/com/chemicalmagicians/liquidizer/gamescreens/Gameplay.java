@@ -71,7 +71,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         glassPath.setOrigin(Align.center);
         glassPath.setPosition(200,120);
         colb.addActor(glassPath);
-        gameScreenUI = new GameScreenUI();
+//        gameScreenUI = new GameScreenUI();
 //        mainMenuUI =new MainMenuUI();
         addActor(elixirGroup);
         addActor(colb);
@@ -232,8 +232,8 @@ public class Gameplay extends GameScreen implements IGameplay {
         }
         sr.end();
         setFillParent(true);
-        add(gameScreenUI).grow();
-//        add(mainMenuUI).grow();
+//        add(gameScreenUI).grow();
+        add(mainMenuUI).grow();
     }
 
     private void fillWithElixir(int length, int startIndex, Color color) {

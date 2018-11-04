@@ -1,12 +1,16 @@
 package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
 
 public class MainMenuUI extends Table {
@@ -41,9 +45,18 @@ public class MainMenuUI extends Table {
 		Sprite paperSprite = atlas.createSprite("paper");
 		paperSprite.flip(true,false);
 		Image paper = new Image(new TextureRegionDrawable(paperSprite));
-		paper.scaleBy(-0.15f);
+		paper.scaleBy(-0.3f);
 		Table paperTable = new Table();
-		paperTable.add(paper).align(Align.center).padTop(40).padLeft(50);
+		paperTable.add(paper).align(Align.center).padTop(20).padRight(-100);
+		paperTable.row();
+		Image playButton = new Image(atlas.findRegion("play-btn"));
+		playButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+//				System.out.println("click");
+			}
+		});
+		paperTable.add(playButton);
 		table.stack(new Image(new TextureRegionDrawable(boardSprite)),paperTable);
 		return table;
 	}
