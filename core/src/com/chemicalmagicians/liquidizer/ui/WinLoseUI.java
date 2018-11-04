@@ -14,6 +14,7 @@ public class WinLoseUI extends Table {
 
 	public Table winTable(){
 		Table table=new Table();
+		
 		return table;
 	}
 }

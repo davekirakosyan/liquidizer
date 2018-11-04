@@ -38,9 +38,16 @@ character
   orig: 463, 511
   offset: 0, 0
   index: -1
-glass-path
+half-character
   rotate: false
   xy: 789, 1446
+  size: 546, 482
+  orig: 546, 482
+  offset: 0, 0
+  index: -1
+glass-path
+  rotate: false
+  xy: 2, 2055
   size: 874, 424
   orig: 874, 424
   offset: 0, 0
@@ -48,6 +55,20 @@ glass-path
 paper
   rotate: false
   xy: 1689, 2
+  size: 346, 423
+  orig: 346, 423
+  offset: 0, 0
+  index: -1
+paper-win
+  rotate: false
+  xy: 1337, 1446
+  size: 346, 423
+  orig: 346, 423
+  offset: 0, 0
+  index: -1
+paper-fail
+  rotate: false
+  xy: 1685, 1446
   size: 346, 423
   orig: 346, 423
   offset: 0, 0
