@@ -15,6 +15,7 @@ import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import com.chemicalmagicians.liquidizer.gamescreens.LevelSelection;
 import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
 import com.chemicalmagicians.liquidizer.interfaces.GameController;
+import com.chemicalmagicians.liquidizer.ui.WinLoseUI;
 
 public class Liquidizer extends ApplicationAdapter {
 
@@ -27,6 +28,7 @@ public class Liquidizer extends ApplicationAdapter {
 	//Menus
 
 	private MainMenu mainMenu;
+	private WinLoseUI winLoseUI;
 	private LevelSelection levelSelection;
 	public Gameplay gameplay;
 
@@ -39,10 +41,11 @@ public class Liquidizer extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(stage);	// todo:  KAREVOR TOX
 
 
-
+		winLoseUI=new WinLoseUI(this);
+		stage.addActor(winLoseUI.failTable());
 		mainMenu = new MainMenu(this);
-		mainMenu.start();
-		stage.addActor(mainMenu);
+//		mainMenu.start();
+//		stage.addActor(mainMenu);
 		levelSelection = new LevelSelection(this);
 
 		gameController = new GameController(this);
