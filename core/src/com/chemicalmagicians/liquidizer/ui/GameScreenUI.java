@@ -28,11 +28,8 @@ public class GameScreenUI extends Table {
 		Table elixir = new Table();
 		elixir.setFillParent(true);
 
-
 		Table rightTopAlignedTable = new Table();
-
 		rightTopAlignedTable.setTouchable(Touchable.enabled);
-
 
 		for(int i=0; i<Gameplay.currentLvlElixirColors.length; i++) {
 			if (Gameplay.currentLvlElixirColors[i]==Color.RED) {

@@ -1,4 +1,4 @@
-package com.chemicalmagicians.liquidizer;
+package com.chemicalmagicians.liquidizer.interfaces;
 
 public interface IGameController {
 

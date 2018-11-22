@@ -10,7 +10,7 @@ import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.interfaces.IMainMenu;
 import com.chemicalmagicians.liquidizer.ui.MainMenuUI;
 
-public class MainMenu extends GameScreen implements IMainMenu {
+public class MainMenu extends GameScreen implements IMainMenu { // todo : maybe get rid of the implementation as the interface is empty
     public MainMenuUI mainMenuUI;
     private TextureAtlas atlas;
 
@@ -20,11 +20,5 @@ public class MainMenu extends GameScreen implements IMainMenu {
         mainMenuUI=new MainMenuUI(liquidizer);
         setBackground(new TextureRegionDrawable(atlas.findRegion("backgraund-game-start-menu")));
         add(mainMenuUI).grow();
-    }
-
-
-    public void start() {
-
-        System.out.println("started");
     }
 }

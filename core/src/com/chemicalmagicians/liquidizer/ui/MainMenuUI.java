@@ -57,7 +57,8 @@ public class MainMenuUI extends Table {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				gameplay = new Gameplay(liquidizer);
+				gameplay = new Gameplay(liquidizer, 1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
+//				gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
 				gameplay.start();
 				getStage().addActor(gameplay);
 				liquidizer.isGameOn = true;

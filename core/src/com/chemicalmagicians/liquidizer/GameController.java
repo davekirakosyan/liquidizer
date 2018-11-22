@@ -1,7 +1,8 @@
-package com.chemicalmagicians.liquidizer.interfaces;
+package com.chemicalmagicians.liquidizer;
 
-import com.chemicalmagicians.liquidizer.IGameController;
 import com.chemicalmagicians.liquidizer.Liquidizer;
+import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
+import com.chemicalmagicians.liquidizer.interfaces.IGameController;
 
 public class GameController implements IGameController {
 

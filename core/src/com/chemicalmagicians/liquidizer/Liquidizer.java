@@ -5,16 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import com.chemicalmagicians.liquidizer.gamescreens.LevelSelection;
 import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
-import com.chemicalmagicians.liquidizer.interfaces.GameController;
+import com.chemicalmagicians.liquidizer.interfaces.IGameController;
 import com.chemicalmagicians.liquidizer.ui.WinLoseUI;
 
 public class Liquidizer extends ApplicationAdapter {
@@ -22,11 +18,9 @@ public class Liquidizer extends ApplicationAdapter {
 	public Stage stage;
 	private PolygonSpriteBatch batch;
 
-
 	private IGameController gameController;
 
 	//Menus
-
 	private MainMenu mainMenu;
 	private WinLoseUI winLoseUI;
 	private LevelSelection levelSelection;
@@ -38,22 +32,15 @@ public class Liquidizer extends ApplicationAdapter {
 		batch = new PolygonSpriteBatch();
 		ExtendViewport extendViewport = new ExtendViewport(1280,720, 4000, 1920, camera);
 		stage = new Stage(extendViewport, batch);
-		Gdx.input.setInputProcessor(stage);	// todo:  KAREVOR TOX
-
+		Gdx.input.setInputProcessor(stage);
 
 		winLoseUI=new WinLoseUI(this);
 		stage.addActor(winLoseUI.failTable());
 		mainMenu = new MainMenu(this);
-		mainMenu.start();
 		stage.addActor(mainMenu);
 		levelSelection = new LevelSelection(this);
 
 		gameController = new GameController(this);
-
-//		gameplay = new Gameplay(this);
-//		gameplay.start();
-//		stage.addActor(gameplay);
-
 	}
 
 	public boolean isGameOn = false;
@@ -68,7 +55,6 @@ public class Liquidizer extends ApplicationAdapter {
 		stage.act();
 		stage.draw();
 	}
-
 
 	@Override
 	public void resize (int width, int height) {
