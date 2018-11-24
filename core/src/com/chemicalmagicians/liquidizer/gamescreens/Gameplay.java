@@ -43,9 +43,11 @@ public class Gameplay extends GameScreen implements IGameplay {
     private int lastElixirPersonalIndex = 0;
 
     private boolean isPressed = false;  // todo: this is only for testing, later should be deleted
-    private boolean isElixirFlowing = false;
-    private boolean isMixing = false;
     private boolean isPathJustClicked = false;
+    public static boolean isElixirFlowing = false;
+    private boolean isMixing = false;
+    private boolean isGameOver = false;
+    private boolean hasTheRightMix = false;
 
     public Group singleElixir;
     private Group elixirGroup=new Group();
@@ -207,30 +209,22 @@ public class Gameplay extends GameScreen implements IGameplay {
             if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
                     && elixirA.color == Color.YELLOW)) {
                 outcomeColor = Color.ORANGE;
-                fillWithElixir(elixirA.length, startIndex, outcomeColor);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
             } else if ((elixirA.color == Color.GREEN && elixirB.color == Color.YELLOW) || (elixirB.color == Color.GREEN
                     && elixirA.color == Color.YELLOW)) {
                 outcomeColor = Color.CYAN;
-                fillWithElixir(elixirA.length, startIndex, outcomeColor);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
             } else if ((elixirA.color == Color.RED && elixirB.color == Color.BLUE) || (elixirB.color == Color.RED
                     && elixirA.color == Color.BLUE )) {
                 outcomeColor = Color.PURPLE;
-                fillWithElixir(elixirA.length, startIndex, outcomeColor);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
             } else if(elixirA.color == elixirB.color) {
                 outcomeColor = Color.PURPLE;
-                fillWithElixir(elixirA.length, startIndex, outcomeColor);
-                elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
-                isMixing = true;
+            } else {
+                return;
             }
 
+            fillWithElixir(elixirA.length, startIndex, outcomeColor);
+            elixirA.removeElixir(elixirA.elixirPersonalIndex, elixirB.elixirPersonalIndex);
             currentLevel.onMixing(outcomeColor);
-
+            isMixing = true;
         }
     }
 
@@ -330,7 +324,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private class Level {
         public int lvl;
         public String goal;
-        public boolean areMixing = false;
+        public boolean shouldMix;
         public int amountOfElixirs = 0;
         Color idealOutcome;
 
@@ -343,39 +337,44 @@ public class Gameplay extends GameScreen implements IGameplay {
             this.elixirColors = elixirColors;
             this.idealOutcome = idealOutcome;
             this.lvl = lvl;
-            this.areMixing = areMixing;
+            this.shouldMix = areMixing;
             currentLvlElixirColors = elixirColors;
         }
 
-        private boolean anotherShittyBool = true;
-        private boolean hasTheRightMix = false;
+
         public void onMixing(Color outcomeColor) {
-            if(!areMixing) {
-                if(anotherShittyBool) {
-                    System.out.println("loser");
-                    WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
-                    winLoseUI.failTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
-                    winLoseUI.setPosition(500,500);
-                    addActor(winLoseUI.failTable());
-                    anotherShittyBool = false;
+            if(!shouldMix) {
+                if(!isGameOver) {
+                    gameOver();
+                    isGameOver = true;
                 }
             } else {
                 if(lvl==2) {
                     if (outcomeColor == idealOutcome) {
                         hasTheRightMix = true;
                     } else {
-                        WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
-                        winLoseUI.failTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
-                        winLoseUI.setPosition(500,500);
-                        addActor(winLoseUI.failTable());
+                        if(!isGameOver) {
+                            gameOver();
+                            isGameOver = true;
+                        }
                     }
                 }
             }
         }
+
+        public void gameOver() {
+            isElixirFlowing = false;
+            System.out.println("loser");
+            WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+            winLoseUI.failTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+            winLoseUI.setPosition(500,500);
+            addActor(winLoseUI.failTable());
+        }
+
         private boolean lvl2Check = false;
         private boolean checkForWinL2 = false;
         public void update() {
-            if(!areMixing) {
+            if(!shouldMix) {
                 finishCheck = true;
                 for (int i=0; i<elixirColors.length; i++) {
                     if (!usedElixirs.contains(elixirColors[i], true)) {
