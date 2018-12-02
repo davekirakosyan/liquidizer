@@ -21,7 +21,7 @@ public class Liquidizer extends ApplicationAdapter {
 	private IGameController gameController;
 
 	//Menus
-	private MainMenu mainMenu;
+	public MainMenu mainMenu;
 	private WinLoseUI winLoseUI;
 	private LevelSelection levelSelection;
 	public Gameplay gameplay;

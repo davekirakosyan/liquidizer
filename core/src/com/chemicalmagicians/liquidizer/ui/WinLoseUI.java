@@ -1,12 +1,16 @@
 package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.chemicalmagicians.liquidizer.Liquidizer;
+import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 import javafx.scene.control.Tab;
 
 public class WinLoseUI extends Table {
@@ -27,6 +31,13 @@ public class WinLoseUI extends Table {
 		Image winPaper = new Image(atlas.findRegion("paper-win"));
 		Image refreshButton = new Image(atlas.findRegion("restart-button"));
 		Image nextLevel = new Image(atlas.findRegion("left-right-arrow"));
+		nextLevel.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				System.out.println("booo");
+				liquidizer.mainMenu.mainMenuUI.gameplay.remove();
+			}
+		});
 		Table boardTable = new Table();
 		Table winPaperTable =new Table();
 		boardTable.setFillParent(true);
