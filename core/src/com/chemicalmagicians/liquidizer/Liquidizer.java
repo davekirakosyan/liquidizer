@@ -12,6 +12,7 @@ import com.chemicalmagicians.liquidizer.gamescreens.LevelSelection;
 import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
 import com.chemicalmagicians.liquidizer.interfaces.IGameController;
 import com.chemicalmagicians.liquidizer.ui.WinLoseUI;
+import com.sun.scenario.Settings;
 
 public class Liquidizer extends ApplicationAdapter {
 

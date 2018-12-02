@@ -32,11 +32,13 @@ public class WinLoseUI extends Table {
 		nextLevel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-			System.out.println("booo");
-			liquidizer.mainMenu.mainMenuUI.lvl1Gameplay.remove();
-			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
-			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
-			liquidizer.isGameOn = true;
+				if(Liquidizer.currLvl == 1) {
+					System.out.println("booo");
+					liquidizer.mainMenu.mainMenuUI.lvl1Gameplay.remove();
+					liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
+					liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
+					liquidizer.isGameOn = true;
+				}
 			}
 		});
 		Table boardTable = new Table();
