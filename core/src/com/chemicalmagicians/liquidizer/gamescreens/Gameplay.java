@@ -79,6 +79,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     @Override
     public void start () {
+        Liquidizer.currLvl = currentLevel.lvl;
         elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
         metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
         createCurve();
@@ -248,20 +249,20 @@ public class Gameplay extends GameScreen implements IGameplay {
             singleElixir = new Group() {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
-                    batch.flush();
-                    buffer.begin();
-                    Gdx.gl.glClearColor(0, 0, 0, 0);
-                    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                    super.draw(batch, parentAlpha);
-                    batch.flush();
-                    buffer.end();
+                batch.flush();
+                buffer.begin();
+                Gdx.gl.glClearColor(0, 0, 0, 0);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                super.draw(batch, parentAlpha);
+                batch.flush();
+                buffer.end();
 
-                    batch.setProjectionMatrix(batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-                    batch.setShader(metaBallShader);
-                    batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1f, 1);
-                    batch.setShader(null);
+                batch.setProjectionMatrix(batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+                batch.setShader(metaBallShader);
+                batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1f, 1);
+                batch.setShader(null);
 
-                    batch.setProjectionMatrix(Gameplay.this.getStage().getViewport().getCamera().combined);
+                batch.setProjectionMatrix(Gameplay.this.getStage().getViewport().getCamera().combined);
 
                 }
             };
@@ -384,11 +385,12 @@ public class Gameplay extends GameScreen implements IGameplay {
                 if(finishCheck)
                     deltaTime+=Gdx.graphics.getDeltaTime();
                 if(deltaTime>=4 && !lvl2Check ) {
-//                    levelUp2();
+                    lvl2Check = true;
                     WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
                     winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
                     winLoseUI.setPosition(500,500);
                     addActor(winLoseUI.winTable());
+                    System.out.println("kakaaaa");
                 }
             }
 
@@ -401,7 +403,6 @@ public class Gameplay extends GameScreen implements IGameplay {
             }
         }
         public void levelUp2() {
-            lvl2Check = true;
             System.out.println("lvl2");
             resetElixirs();
         }

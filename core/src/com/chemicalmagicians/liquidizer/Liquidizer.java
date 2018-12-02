@@ -25,6 +25,7 @@ public class Liquidizer extends ApplicationAdapter {
 	private WinLoseUI winLoseUI;
 	private LevelSelection levelSelection;
 	public Gameplay gameplay;
+	public static int currLvl;
 
 	@Override
 	public void create () {
@@ -49,8 +50,14 @@ public class Liquidizer extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(isGameOn)
-			mainMenu.mainMenuUI.gameplay.render();
+		if(isGameOn) {
+			if(currLvl == 1) {
+				mainMenu.mainMenuUI.lvl1Gameplay.render();
+			}
+			else if(currLvl == 2) {
+				mainMenu.mainMenuUI.lvl2Gameplay.render();
+			}
+		}
 
 		stage.act();
 		stage.draw();

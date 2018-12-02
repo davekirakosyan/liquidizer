@@ -7,11 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
-import javafx.scene.control.Tab;
 
 public class WinLoseUI extends Table {
 
@@ -34,8 +32,11 @@ public class WinLoseUI extends Table {
 		nextLevel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				System.out.println("booo");
-				liquidizer.mainMenu.mainMenuUI.gameplay.remove();
+			System.out.println("booo");
+			liquidizer.mainMenu.mainMenuUI.lvl1Gameplay.remove();
+			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
+			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
+			liquidizer.isGameOn = true;
 			}
 		});
 		Table boardTable = new Table();

@@ -12,15 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
-import com.chemicalmagicians.liquidizer.gamescreens.MainMenu;
 
 public class MainMenuUI extends Table {
 
 	private TextureAtlas atlas;
-	public Gameplay gameplay;
+	public Gameplay lvl1Gameplay;
+	public Gameplay lvl2Gameplay;
 	Liquidizer liquidizer;
 
 	public MainMenuUI(Liquidizer liquidizer){
+		lvl1Gameplay = new Gameplay(liquidizer, 1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
+		lvl2Gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
 		this.liquidizer = liquidizer;
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
 		addActor(leftSideTable());
@@ -57,10 +59,8 @@ public class MainMenuUI extends Table {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				gameplay = new Gameplay(liquidizer, 1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
-//				gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
-				gameplay.start();
-				getStage().addActor(gameplay);
+				lvl1Gameplay.start();
+				getStage().addActor(lvl1Gameplay);
 				liquidizer.isGameOn = true;
 			}
 		});
