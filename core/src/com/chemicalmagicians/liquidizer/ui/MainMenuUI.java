@@ -2,6 +2,7 @@ package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.chemicalmagicians.liquidizer.Liquidizer;
+import com.chemicalmagicians.liquidizer.ParticleActor;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 
 public class MainMenuUI extends Table {
@@ -25,9 +27,17 @@ public class MainMenuUI extends Table {
 		lvl2Gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
 		this.liquidizer = liquidizer;
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
+		addActor(characterTable());
 		addActor(leftSideTable());
 		addActor(rightSideTable());
-		addActor(characterTable());
+
+		ParticleEffect blueFogParticle = new ParticleEffect();
+		blueFogParticle.load(Gdx.files.internal("particles/blue-fog.p"), Gdx.files.internal("particles/textures"));
+		ParticleActor gasParticleActor = new ParticleActor(blueFogParticle);
+		gasParticleActor.startEffect();
+		gasParticleActor.setPosition(0, Gdx.graphics.getHeight());
+		addActor(gasParticleActor);
+
 	}
 
 	public Table leftSideTable(){
@@ -38,6 +48,8 @@ public class MainMenuUI extends Table {
 		paper.scaleBy(-0.15f);
 		Table paperTable = new Table();
 		paperTable.add(paper).align(Align.center).padTop(40).padLeft(40);
+
+
 		table.stack(new Image(atlas.findRegion("board-left")),paperTable).padTop(-150);
 		return table;
 	}
@@ -66,6 +78,13 @@ public class MainMenuUI extends Table {
 		});
 		paperTable.add(playButton);
 		table.stack(new Image(new TextureRegionDrawable(boardSprite)),paperTable);
+
+		ParticleEffect violetGasParticle = new ParticleEffect();
+		violetGasParticle.load(Gdx.files.internal("particles/violet-gas.p"), Gdx.files.internal("particles/textures"));
+		ParticleActor gasParticleActor = new ParticleActor(violetGasParticle);
+		gasParticleActor.startEffect();
+		table.add(gasParticleActor).right().bottom().padBottom(-100);
+
 		return table;
 	}
 
