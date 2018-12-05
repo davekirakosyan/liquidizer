@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -74,7 +75,10 @@ public class Gameplay extends GameScreen implements IGameplay {
         addActor(elixirGroup);
         addActor(colb);
 
-        setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+        if(currentLevel.lvl == 1)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
+        else if(currentLevel.lvl == 2)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
     }
 
     @Override
@@ -375,7 +379,7 @@ public class Gameplay extends GameScreen implements IGameplay {
         private boolean lvl2Check = false;
         private boolean checkForWinL2 = false;
         public void update() {
-            if(!shouldMix) {
+            if(!shouldMix && !isGameOver) {
                 finishCheck = true;
                 for (int i=0; i<elixirColors.length; i++) {
                     if (!usedElixirs.contains(elixirColors[i], true)) {
@@ -390,7 +394,6 @@ public class Gameplay extends GameScreen implements IGameplay {
                     winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
                     winLoseUI.setPosition(500,500);
                     addActor(winLoseUI.winTable());
-                    System.out.println("kakaaaa");
                 }
             }
 
