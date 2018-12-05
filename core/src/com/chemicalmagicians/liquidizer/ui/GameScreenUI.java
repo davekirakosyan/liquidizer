@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.chemicalmagicians.liquidizer.Liquidizer;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 
 public class GameScreenUI extends Table {
@@ -116,14 +117,14 @@ public class GameScreenUI extends Table {
 		leftTopAlignedTable.setTouchable(Touchable.enabled);
 		leftTopAlignedTable.add(new Image(atlas.findRegion("settings-button"))).size(112);
 		leftTopAlignedTable.row().padTop(20);
-		Image resterBtn = new Image(atlas.findRegion("restart-button"));
-		resterBtn.addListener(new ClickListener(){
+		Image restartBtn = new Image(atlas.findRegion("restart-button"));
+		restartBtn.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 //				Gameplay.startLvl2 = true;
 			}
 		});
-		leftTopAlignedTable.add(resterBtn).size(88);
+		leftTopAlignedTable.add(restartBtn).size(88);
 
 		controlBarTable.top().left();
 		controlBarTable.add(leftTopAlignedTable).pad(20);

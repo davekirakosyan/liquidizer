@@ -378,6 +378,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         private boolean lvl2Check = false;
         private boolean checkForWinL2 = false;
+
         public void update() {
             if(!shouldMix && !isGameOver) {
                 finishCheck = true;
@@ -394,22 +395,26 @@ public class Gameplay extends GameScreen implements IGameplay {
                     winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
                     winLoseUI.setPosition(500,500);
                     addActor(winLoseUI.winTable());
+                    isElixirFlowing = false;
                 }
             }
 
             if(lvl==2 && hasTheRightMix && usedElixirs.contains(Color.GREEN, true) && !checkForWinL2) {
-                WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
-                winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
-                winLoseUI.setPosition(500,500);
-                addActor(winLoseUI.winTable());
-                checkForWinL2 = true;
+                deltaTime+=Gdx.graphics.getDeltaTime();
+                if(deltaTime>=4) {
+                    WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                    winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                    winLoseUI.setPosition(500, 500);
+                    addActor(winLoseUI.winTable());
+                    checkForWinL2 = true;
+                    isElixirFlowing = false;
+                }
             }
         }
         public void levelUp2() {
             System.out.println("lvl2");
             resetElixirs();
         }
-
     }
 
     public void resetElixirs() {

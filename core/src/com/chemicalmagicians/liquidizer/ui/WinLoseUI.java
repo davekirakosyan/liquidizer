@@ -42,6 +42,12 @@ public class WinLoseUI extends Table {
 				}
 			}
 		});
+		refreshButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				restartLevel();
+			}
+		});
 		Table boardTable = new Table();
 		Table winPaperTable =new Table();
 		boardTable.setFillParent(true);
@@ -67,7 +73,12 @@ public class WinLoseUI extends Table {
 		Image character = new Image(atlas.findRegion("half-character"));
 		Image winPaper = new Image(atlas.findRegion("paper-fail"));
 		Image refreshButton = new Image(atlas.findRegion("restart-button"));
-		Image nextLevel = new Image(atlas.findRegion("left-right-arrow"));
+		refreshButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				restartLevel();
+			}
+		});
 		Table boardTable = new Table();
 		Table winPaperTable =new Table();
 		boardTable.setFillParent(true);
@@ -79,10 +90,25 @@ public class WinLoseUI extends Table {
 		bottomUIPanel.setFillParent(true);
 		bottomUIPanel.add(refreshButton).padBottom(-350).padLeft(500);
 		bottomUIPanel.add().width(20);
-		bottomUIPanel.add(nextLevel).padBottom(-350);
 		table.addActor(boardTable);
 		table.addActor(character);
 		table.addActor(bottomUIPanel);
 		return table;
+	}
+
+	public void restartLevel() {
+		if(Liquidizer.currLvl == 1) {
+			System.out.println("restart lvl 1");
+			liquidizer.mainMenu.mainMenuUI.lvl1Gameplay = new Gameplay(liquidizer, 1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
+			liquidizer.mainMenu.mainMenuUI.lvl1Gameplay.start();
+			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl1Gameplay);
+			liquidizer.isGameOn = true;
+		} else if(Liquidizer.currLvl == 2) {
+			System.out.println("restart lvl 2");
+			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
+			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
+			liquidizer.isGameOn = true;
+		}
 	}
 }
