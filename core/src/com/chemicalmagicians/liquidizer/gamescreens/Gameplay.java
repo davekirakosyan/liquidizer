@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -83,6 +84,12 @@ public class Gameplay extends GameScreen implements IGameplay {
         elixirTexture = new Sprite(atlas.findRegion("elixir-particle"));
         metaBallShader = new ShaderProgram(Gdx.files.internal("shader.vert"), Gdx.files.internal("shader.frag"));
         createCurve();
+
+        if(currentLevel.lvl == 1)
+            setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+        else if(currentLevel.lvl == 2)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2-back.png")));
+
     }
 
     private void createCurve() {

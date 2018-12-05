@@ -43,6 +43,18 @@ public class Liquidizer extends ApplicationAdapter {
 		levelSelection = new LevelSelection(this);
 
 		gameController = new GameController(this);
+
+
+		System.out.println("    ********************************************************************************");
+		System.out.println("    *   _       _      _      _   _   _   _ _     _   _ _ _    _ _ _   _ _ _       *");
+		System.out.println("    *  | |     | |   / _ \\   | | | | | | |  _ \\  | | |_ _  /  |  _ _| |  _  \\      *");
+		System.out.println("    *  | |     | |  | | | |  | | | | | | | | | | | |    / /   | |_    | |_| |      *");
+		System.out.println("    *  | |     | |  | | | |  | | | | | | | | | | | |   / /    |  _|   |  _  /      *");
+		System.out.println("    *  | |_ _  | |  | | | |  | |_| | | | | |_| | | |  / /_ _  | |_ _  | | \\ \\      *");
+		System.out.println("    *  |_ _ _| |_|   \\ _  \\  |_ _ _| |_| |_ _ /  |_| |_ _ _ | |_ _ _| |_|  \\_\\     *");
+		System.out.println("    *                    \\_|                                                       *");
+		System.out.println("    ********************************************************************************");
+
 	}
 
 	public boolean isGameOn = false;
