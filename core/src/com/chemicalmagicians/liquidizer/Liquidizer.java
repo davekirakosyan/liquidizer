@@ -58,6 +58,9 @@ public class Liquidizer extends ApplicationAdapter {
 			else if(currLvl == 2) {
 				mainMenu.mainMenuUI.lvl2Gameplay.render();
 			}
+			else if(currLvl == 3) {
+				mainMenu.mainMenuUI.lvl3Gameplay.render();
+			}
 		}
 
 		stage.act();

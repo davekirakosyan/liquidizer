@@ -34,10 +34,15 @@ public class WinLoseUI extends Table {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(Liquidizer.currLvl == 1) {
-					System.out.println("booo");
 					liquidizer.mainMenu.mainMenuUI.lvl1Gameplay.remove();
 					liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
 					liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
+					liquidizer.isGameOn = true;
+				}
+				else if(Liquidizer.currLvl == 2) {
+					liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.remove();
+					liquidizer.mainMenu.mainMenuUI.lvl3Gameplay.start();
+					liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl3Gameplay);
 					liquidizer.isGameOn = true;
 				}
 			}
@@ -108,6 +113,12 @@ public class WinLoseUI extends Table {
 			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
 			liquidizer.mainMenu.mainMenuUI.lvl2Gameplay.start();
 			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl2Gameplay);
+			liquidizer.isGameOn = true;
+		}  else if(Liquidizer.currLvl == 3) {
+			System.out.println("restart lvl 3");
+			liquidizer.mainMenu.mainMenuUI.lvl3Gameplay = new Gameplay(liquidizer, 3, "Mix red, blue. No yellow, green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE}, Color.PURPLE, true, 20);
+			liquidizer.mainMenu.mainMenuUI.lvl3Gameplay.start();
+			liquidizer.stage.addActor(liquidizer.mainMenu.mainMenuUI.lvl3Gameplay);
 			liquidizer.isGameOn = true;
 		}
 	}

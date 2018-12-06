@@ -79,6 +79,8 @@ public class Gameplay extends GameScreen implements IGameplay {
             setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
         else if(currentLevel.lvl == 2)
             setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
+        else if(currentLevel.lvl == 3)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl3.png")));
     }
 
     @Override
@@ -208,7 +210,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
 
-        Color outcomeColor = new Color();
+        Color outcomeColor;
 
         if (!isMixing) {
             if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
@@ -354,7 +356,7 @@ public class Gameplay extends GameScreen implements IGameplay {
                     isGameOver = true;
                 }
             } else {
-                if(lvl==2) {
+                if(lvl==2 || lvl==3) {
                     if (outcomeColor == idealOutcome) {
                         hasTheRightMix = true;
                     } else {
