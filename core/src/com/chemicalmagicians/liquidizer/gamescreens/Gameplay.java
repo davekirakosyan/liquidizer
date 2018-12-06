@@ -32,7 +32,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private int steps = 300;
     private Vector2[] controlPoints = new Vector2[4];
     private Vector2[] curvePoints = new Vector2[steps];
-    private GameScreenUI gameScreenUI;
+    public GameScreenUI gameScreenUI;
     private Level currentLevel;
 
     private ShaderProgram metaBallShader;
@@ -134,6 +134,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             if(Gdx.input.isTouched() && !isPathJustClicked) {
                 if (temp.x < curvePoints[i].x+60 && temp.x > curvePoints[i].x && temp.y < curvePoints[i].y+60 && temp.y > curvePoints[i].y-10 ) {
                     fillWithElixir(currentLevel.amountOfElixirs, i, currentUsingColor);
+                    gameScreenUI.startTouchParticle();
                     isPathJustClicked = true;
                 }
             } else if(!Gdx.input.isTouched()) {
@@ -309,7 +310,8 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-            this.image.scaleBy((float)Math.random()*0.35f+0.15f);
+//            this.image.scaleBy((float)Math.random()*0.35f+0.15f);
+            this.image.scaleBy(0.5f);
             this.currentIndex = currentIndex;
         }
 
