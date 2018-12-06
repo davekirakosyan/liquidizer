@@ -2,6 +2,7 @@ package com.chemicalmagicians.liquidizer.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -46,7 +47,7 @@ public class MainMenuUI extends Table {
 		Table table = new Table();
 		table.setFillParent(true);
 		table.left();
-		Image paper=new Image(atlas.findRegion("paper"));
+		Image paper=new Image(new Texture("ui/story.png"));
 		paper.scaleBy(-0.15f);
 		Table paperTable = new Table();
 		paperTable.add(paper).align(Align.center).padTop(40).padLeft(40);
@@ -62,7 +63,7 @@ public class MainMenuUI extends Table {
 		table.right();
 		Sprite boardSprite = atlas.createSprite("board-left");
 		boardSprite.flip(true,false);
-		Sprite paperSprite = atlas.createSprite("paper");
+		Sprite paperSprite = new Sprite(new Texture("ui/statePaper.png"));
 		paperSprite.flip(true,false);
 		Image paper = new Image(new TextureRegionDrawable(paperSprite));
 		paper.scaleBy(-0.3f);

@@ -75,12 +75,12 @@ public class Gameplay extends GameScreen implements IGameplay {
         addActor(elixirGroup);
         addActor(colb);
 
-        if(currentLevel.lvl == 1)
-            setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
-        else if(currentLevel.lvl == 2)
-            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
-        else if(currentLevel.lvl == 3)
-            setBackground(new TextureRegionDrawable(new Texture("ui/lvl3.png")));
+//        if(currentLevel.lvl == 1)
+//            setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
+//        else if(currentLevel.lvl == 2)
+//            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
+//        else if(currentLevel.lvl == 3)
+//            setBackground(new TextureRegionDrawable(new Texture("ui/lvl3.png")));
     }
 
     @Override
@@ -91,9 +91,11 @@ public class Gameplay extends GameScreen implements IGameplay {
         createCurve();
 
         if(currentLevel.lvl == 1)
-            setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
         else if(currentLevel.lvl == 2)
-            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2-back.png")));
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
+        else if(currentLevel.lvl == 3)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl3.png")));
 
     }
 
