@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -13,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.chemicalmagicians.liquidizer.Liquidizer;
+import com.chemicalmagicians.liquidizer.ParticleActor;
 import com.chemicalmagicians.liquidizer.gamescreens.Gameplay;
 
 public class GameScreenUI extends Table {
@@ -39,7 +42,8 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.RED;
-					}
+						startTouchParticle();
+                    }
 				});
 				rightTopAlignedTable.row().padTop(-10);
 
@@ -51,6 +55,7 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.GREEN;
+						startTouchParticle();
 					}
 				});
 				rightTopAlignedTable.row().padTop(-10);
@@ -62,6 +67,7 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.BLUE;
+						startTouchParticle();
 					}
 				});
 				rightTopAlignedTable.row().padTop(-10);
@@ -73,6 +79,7 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.YELLOW;
+						startTouchParticle();
 					}
 				});
 				rightTopAlignedTable.row().padTop(-10);
@@ -84,6 +91,7 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.PURPLE;
+						startTouchParticle();
 					}
 				});
 				rightTopAlignedTable.row().padTop(-10);
@@ -95,6 +103,7 @@ public class GameScreenUI extends Table {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Gameplay.currentUsingColor = Color.ORANGE;
+						startTouchParticle();
 					}
 				});
 				rightTopAlignedTable.row().padTop(-10);
@@ -116,14 +125,14 @@ public class GameScreenUI extends Table {
 		leftTopAlignedTable.setTouchable(Touchable.enabled);
 		leftTopAlignedTable.add(new Image(atlas.findRegion("settings-button"))).size(112);
 		leftTopAlignedTable.row().padTop(20);
-		Image resterBtn = new Image(atlas.findRegion("restart-button"));
-		resterBtn.addListener(new ClickListener(){
+		Image restartBtn = new Image(atlas.findRegion("restart-button"));
+		restartBtn.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 //				Gameplay.startLvl2 = true;
 			}
 		});
-		leftTopAlignedTable.add(resterBtn).size(88);
+		leftTopAlignedTable.add(restartBtn).size(88);
 
 		controlBarTable.top().left();
 		controlBarTable.add(leftTopAlignedTable).pad(20);
@@ -139,6 +148,15 @@ public class GameScreenUI extends Table {
 		flaskArray.add(new Image(atlas.findRegion("purple")));
 		flaskArray.add(new Image(atlas.findRegion("orange")));
 		return flaskArray;
+	}
+
+	public void startTouchParticle() {
+		ParticleEffect touchParticle = new ParticleEffect();
+		touchParticle.load(Gdx.files.internal("particles/touch.p"), Gdx.files.internal("particles/textures"));
+		ParticleActor touchParticleActor = new ParticleActor(touchParticle);
+		touchParticleActor.startEffect();
+		touchParticleActor.setPosition(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+		addActor(touchParticleActor);
 	}
 
 

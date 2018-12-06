@@ -32,7 +32,7 @@ public class Gameplay extends GameScreen implements IGameplay {
     private int steps = 300;
     private Vector2[] controlPoints = new Vector2[4];
     private Vector2[] curvePoints = new Vector2[steps];
-    private GameScreenUI gameScreenUI;
+    public GameScreenUI gameScreenUI;
     private Level currentLevel;
 
     private ShaderProgram metaBallShader;
@@ -75,7 +75,12 @@ public class Gameplay extends GameScreen implements IGameplay {
         addActor(elixirGroup);
         addActor(colb);
 
-        setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+        if(currentLevel.lvl == 1)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl1.png")));
+        else if(currentLevel.lvl == 2)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl2.png")));
+        else if(currentLevel.lvl == 3)
+            setBackground(new TextureRegionDrawable(new Texture("ui/lvl3.png")));
     }
 
     @Override
@@ -135,6 +140,7 @@ public class Gameplay extends GameScreen implements IGameplay {
             if(Gdx.input.isTouched() && !isPathJustClicked) {
                 if (temp.x < curvePoints[i].x+60 && temp.x > curvePoints[i].x && temp.y < curvePoints[i].y+60 && temp.y > curvePoints[i].y-10 ) {
                     fillWithElixir(currentLevel.amountOfElixirs, i, currentUsingColor);
+                    gameScreenUI.startTouchParticle();
                     isPathJustClicked = true;
                 }
             } else if(!Gdx.input.isTouched()) {
@@ -211,7 +217,7 @@ public class Gameplay extends GameScreen implements IGameplay {
 
     private void mixElixirs (Elixir elixirA, Elixir elixirB, int startIndex) {
 
-        Color outcomeColor = new Color();
+        Color outcomeColor;
 
         if (!isMixing) {
             if ((elixirA.color == Color.RED && elixirB.color == Color.YELLOW) || (elixirB.color == Color.RED
@@ -310,7 +316,8 @@ public class Gameplay extends GameScreen implements IGameplay {
         public ElixirParticle(int currentIndex, Sprite image, Color color) {
             this.image = new Image(image);
             this.image.setColor(color);
-            this.image.scaleBy((float)Math.random()*0.35f+0.15f);
+//            this.image.scaleBy((float)Math.random()*0.35f+0.15f);
+            this.image.scaleBy(0.5f);
             this.currentIndex = currentIndex;
         }
 
@@ -357,7 +364,7 @@ public class Gameplay extends GameScreen implements IGameplay {
                     isGameOver = true;
                 }
             } else {
-                if(lvl==2) {
+                if(lvl==2 || lvl==3) {
                     if (outcomeColor == idealOutcome) {
                         hasTheRightMix = true;
                     } else {
@@ -381,8 +388,9 @@ public class Gameplay extends GameScreen implements IGameplay {
 
         private boolean lvl2Check = false;
         private boolean checkForWinL2 = false;
+
         public void update() {
-            if(!shouldMix) {
+            if(!shouldMix && !isGameOver) {
                 finishCheck = true;
                 for (int i=0; i<elixirColors.length; i++) {
                     if (!usedElixirs.contains(elixirColors[i], true)) {
@@ -397,23 +405,26 @@ public class Gameplay extends GameScreen implements IGameplay {
                     winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
                     winLoseUI.setPosition(500,500);
                     addActor(winLoseUI.winTable());
-                    System.out.println("kakaaaa");
+                    isElixirFlowing = false;
                 }
             }
 
             if(lvl==2 && hasTheRightMix && usedElixirs.contains(Color.GREEN, true) && !checkForWinL2) {
-                WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
-                winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
-                winLoseUI.setPosition(500,500);
-                addActor(winLoseUI.winTable());
-                checkForWinL2 = true;
+                deltaTime+=Gdx.graphics.getDeltaTime();
+                if(deltaTime>=4) {
+                    WinLoseUI winLoseUI = new WinLoseUI(liquidizer);
+                    winLoseUI.winTable().setBackground(new TextureRegionDrawable(atlas.findRegion("background")));
+                    winLoseUI.setPosition(500, 500);
+                    addActor(winLoseUI.winTable());
+                    checkForWinL2 = true;
+                    isElixirFlowing = false;
+                }
             }
         }
         public void levelUp2() {
             System.out.println("lvl2");
             resetElixirs();
         }
-
     }
 
     public void resetElixirs() {

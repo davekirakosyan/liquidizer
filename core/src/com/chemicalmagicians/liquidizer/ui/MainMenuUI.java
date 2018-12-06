@@ -20,11 +20,13 @@ public class MainMenuUI extends Table {
 	private TextureAtlas atlas;
 	public Gameplay lvl1Gameplay;
 	public Gameplay lvl2Gameplay;
+	public Gameplay lvl3Gameplay;
 	Liquidizer liquidizer;
 
 	public MainMenuUI(Liquidizer liquidizer){
 		lvl1Gameplay = new Gameplay(liquidizer, 1, "No Mixing", new Color[] {Color.RED, Color.BLUE}, Color.PURPLE, false, 20);
 		lvl2Gameplay = new Gameplay(liquidizer, 2, "Mix red, yellow. No green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN}, Color.ORANGE, true, 20);
+		lvl3Gameplay = new Gameplay(liquidizer, 3, "Mix red, blue. No yellow, green", new Color[] {Color.RED, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE}, Color.PURPLE, true, 20);
 		this.liquidizer = liquidizer;
 		atlas = new TextureAtlas(Gdx.files.internal("atlas.pack"));
 		addActor(characterTable());
