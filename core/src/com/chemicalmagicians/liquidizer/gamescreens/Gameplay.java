@@ -208,7 +208,6 @@ public class Gameplay extends GameScreen implements IGameplay {
                             (elixirA.elixirParticles.first().currentIndex+elixirA.length <= elixirB.elixirParticles.first().currentIndex + elixirB.length &&
                                     elixirA.elixirParticles.first().currentIndex+elixirA.length >= elixirB.elixirParticles.first().currentIndex ) ) {
                         mixElixirs(elixirA, elixirB, elixirA.elixirParticles.first().currentIndex);
-//                        System.out.println("wooooorrrrrrkiiiiiing");
                     }
                 }
             }
